@@ -131,13 +131,15 @@ def main():
 
     print("The number list is: ", numbers)
     '''
-    numbers = [10, 1, 5, 2, 8, 12, 5, 3, 2, 19, 1, 2, 3, 4]
+    numbers = [10, 1, 5, 2, 8, 12, 5, 3, 2, 19, 1, 2, 3, 5, 2, 4]
     printMenu()
     option = int(readOption())
     result = True
     if option == 1:
         result = checkP1(numbers)
     elif option == 2:
+        #not working properly
+        return
         result = checkP2(numbers)
     elif option == 3:
         result = checkP3(numbers)
@@ -183,7 +185,7 @@ def printMenu():
     """
     print("Which properties do you want to check on this list?")
     print("1. All elements are in the [0, 10] range")
-    print("2. The sum of all elements is 10")
+    print("2. The sum of all elements is 10 - not working right now")
     print("3. All consecutive number pairs have at least 2 common digits")
     print("4. Close the app")
 
