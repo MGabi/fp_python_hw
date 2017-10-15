@@ -6,10 +6,28 @@ def checkP1(numbers):
     :param numbers: the list that needs to be verified
     :return: true if the condition from above is aquired, false if not
     """
+    start = 0
+    length = 0
+    max = 0
     for i in range(0, len(numbers)):
-        if numbers[i] < 0 or numbers[i] > 10:
-            return False
-    return True
+        if numbers[i] >= 0 and numbers[i] <= 10:
+            length += 1
+        else:
+            if length > max:
+                max = length
+                start = i - max
+            length = 0
+
+    if length > 0:
+        if length > max:
+            max = length
+            start = len(numbers) - max
+
+    print(numbers[start: start + max])
+
+    if length > 0:
+        return True
+    return False
 
 
 def checkP2(numbers):
@@ -18,11 +36,30 @@ def checkP2(numbers):
     :param numbers: the list that needs to be verified
     :return: true if the condition from above is aquired, false if not
     """
-    sum = 0
+    start = 0
+    length = 0
+    max = 0
+    s = 0
     for i in range(0, len(numbers)):
-        sum += numbers[i]
+        if s < 10 and numbers[i] <= 10:
+            length += 1
+        else:
+            if s == 10:
+                if length > max:
+                    max = length
+                    start = i - max
+        length = 0
 
-    return sum == 10
+    if length > 0:
+        if length > max:
+            max = length
+            start = len(numbers) - max
+
+    print(numbers[start: start + max])
+
+    if length > 0:
+        return True
+    return False
 
 
 def checkDigits(nr1, nr2):
@@ -58,22 +95,43 @@ def checkP3(numbers):
     :param numbers: the list that needs to be verified
     :return: true if the condition from above is aquired, false if not
     """
-    for i in range(0, len(numbers) - 1):
-        if not checkDigits(numbers[i], numbers[i+1]):
-            return False
 
-    return True
+    start = 0
+    length = 0
+    max = 0
+    for i in range(0, len(numbers) - 1):
+        if checkDigits(numbers[i], numbers[i+1]):
+            length += 1
+        else:
+            if length > max:
+                max = length
+                start = i - max
+            length = 0
+
+    if length > 0:
+        if length > max:
+            max = length
+            start = len(numbers) - max - 1
+
+    print(numbers[start : start + max + 1])
+    if length > 0:
+        return True
+    return False
 
 
 def main():
     numbers = []
     word = "/0"
     print("Enter an array of numbers.\nPress enter one more time to stop reading.\n")
+    '''
     while word != "":
         word = input()
         if(word.isnumeric()):
             numbers.append(int(word))
 
+    print("The number list is: ", numbers)
+    '''
+    numbers = [10, 1, 5, 2, 8, 12, 5, 3, 2, 19, 1, 2, 3, 4]
     printMenu()
     option = int(readOption())
     result = True
@@ -83,6 +141,8 @@ def main():
         result = checkP2(numbers)
     elif option == 3:
         result = checkP3(numbers)
+    elif option == 4:
+        return
 
     if result:
         print("The array you typed have the ", option, " property.")
@@ -103,10 +163,10 @@ def clearConsole():
 def readOption():
     """
     Reads the desired option from a listed menu
-    :return: selected option ( from 1 to 3 )
+    :return: selected option ( from 1 to 4 )
     """
     option = input()
-    while not option.isnumeric() or int(option) < 1 or int(option) > 3:
+    while not option.isnumeric() or int(option) < 1 or int(option) > 4:
         #clearConsole()
         print("Invalid option. Try again.\n")
         printMenu()
@@ -125,6 +185,6 @@ def printMenu():
     print("1. All elements are in the [0, 10] range")
     print("2. The sum of all elements is 10")
     print("3. All consecutive number pairs have at least 2 common digits")
-
+    print("4. Close the app")
 
 main()
