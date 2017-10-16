@@ -1,6 +1,6 @@
 import os
 
-def checkP1(numbers):
+def check010Range(numbers):
     """
     Checks if all elements are in [0, 10] range
     :param numbers: the list that needs to be verified
@@ -30,7 +30,7 @@ def checkP1(numbers):
     return False
 
 
-def checkP2(numbers):
+def checkElementsSum(numbers):
     """
     Checks if the sum of all elements is 10
     :param numbers: the list that needs to be verified
@@ -89,7 +89,7 @@ def checkDigits(nr1, nr2):
 
     return counter >= 2
 
-def checkP3(numbers):
+def checkConsecutiveCommonDigits(numbers):
     """
     Checks if all consecutive number pairs have at least 2 common digits
     :param numbers: the list that needs to be verified
@@ -108,41 +108,47 @@ def checkP3(numbers):
                 start = i - max
             length = 0
 
+    '''
     if length > 0:
         if length > max:
             max = length
             start = len(numbers) - max - 1
-
-    print(numbers[start : start + max + 1])
-    if length > 0:
+    '''
+    if start != start + max:
+        print(numbers[start: start + max + 1])
         return True
     return False
-
+    '''
+    if length > 0:
+        print(numbers[start: start + max + 1])
+        return True
+    return False
+    '''
 
 def main():
     numbers = []
     word = "/0"
     print("Enter an array of numbers.\nPress enter one more time to stop reading.\n")
-    '''
+
     while word != "":
         word = input()
         if(word.isnumeric()):
             numbers.append(int(word))
 
     print("The number list is: ", numbers)
-    '''
-    numbers = [10, 1, 5, 2, 8, 12, 5, 3, 2, 19, 1, 2, 3, 5, 2, 4]
+
+    #numbers = [10, 1, 5, 2, 8, 12, 5, 3, 2, 19, 1, 2, 3, 5, 2, 4]
     printMenu()
     option = int(readOption())
     result = True
     if option == 1:
-        result = checkP1(numbers)
+        result = check010Range(numbers)
     elif option == 2:
         #not working properly
         return
-        result = checkP2(numbers)
+        result = checkElementsSum(numbers)
     elif option == 3:
-        result = checkP3(numbers)
+        result = checkConsecutiveCommonDigits(numbers)
     elif option == 4:
         return
 
