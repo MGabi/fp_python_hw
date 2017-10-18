@@ -158,15 +158,15 @@ def main():
     numbers = []
     word = "/0"
     print("Enter an array of numbers.\nPress enter one more time to stop reading.\n")
-    '''
+
     while word != "":
         word = input()
         if(word.isnumeric()):
             numbers.append(int(word))
 
     print("The number list is: ", numbers)
-    '''
-    numbers = [11, 2, 8, 0, 1, 1, 32, 9, 3]
+
+    #numbers = [2, 8, 1, 1, 6, 2, -8, 10, 8]
     #output: 1, 3, 2, 10, 5
     printMenu()
     option = int(readOption())
@@ -228,6 +228,7 @@ def printMenu():
     print("3. All consecutive number pairs have at least 2 common digits")
     print("4. Differences between consecutive number pairs have different signs")
     print("")
+    print("### Other options: ")
     print("5. Just print the list")
     print("6. Close the app")
 
