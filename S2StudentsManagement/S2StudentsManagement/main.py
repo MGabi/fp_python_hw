@@ -31,6 +31,7 @@ def add_student(students, student):
 
 def delete_student(students, student_id):
     l = [s for s in students if get_student_id(s) != student_id]
+
 ####### UI SECTION ########
 
 def ui_add_student(students):

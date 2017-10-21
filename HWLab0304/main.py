@@ -12,41 +12,64 @@ managing the list of scores and establishing the winners.
 @author : Gabi
 @email : ytgabi98@gmail.com
 """
+import helper.commands
 import helper.ui_functions as UI
-import helper.commands as CMDS
 import helper.utils as UTILS
+import helper.commands as CMDS
 
-def getNewScore(s1, s2, s3):
-    """
-    Create a new score pair object
-    :param s1: score for #1 problem
-    :param s2: score for #2 problem
-    :param s3: score for #3 problem
-    :return: a list of those 3 scores
-    """
-    return [s1, s2, s3]
+def readCommand():
+    line = input("\033[96m>>> \033[0m")
+    pos = line.find(" ")
+
+    if pos == -1:
+        return line, []
+
+    cmds = line[ : pos]
+    args = line[pos+1 : ].split()
+
+    return cmds, args
 
 def generateScoreList(scoreList):
-    #for i in range(0, 10):
-    #    addScoreToList(getNewScore(i+1, i+1, i+1), scoreList)
-    CMDS.addScoreToList(getNewScore(1, 5, 10), scoreList)
-    CMDS.addScoreToList(getNewScore(2, 1, 1), scoreList)
-    CMDS.addScoreToList(getNewScore(10, 9, 7), scoreList)
-
-
-def parseCommand(cmd):
-    pass
+    for i in range(30):
+       CMDS.addScoreToList(scoreList, UTILS.newRand(), UTILS.newRand(), UTILS.newRand())
 
 def main():
     UI.printAvailableCommands()
     UI.needCommand()
     scoreList = []
     generateScoreList(scoreList)
-    CMDS.insert()
-    print(scoreList)
-    '''
+
     while True:
-        cmd = input(">>> ")
-        parseCommand(cmd)
-    '''
+        currentCommand, currentArgs = readCommand()
+
+        if currentCommand == "exit":
+            break
+
+        try:
+            if currentCommand == "list" and len(currentArgs) > 1:
+                if currentArgs[0] in UTILS.ops:
+                    currentArgs.insert(0, 1)
+                else:
+                    raise TypeError
+
+            if currentCommand == "insert":
+                UTILS.removeEl(currentArgs, "at")
+
+            if currentCommand == "remove" and len(currentArgs) > 1:
+                UTILS.removeEl(currentArgs, "to")
+
+            if currentCommand == "replace":
+                UTILS.removeEl(currentArgs, "with")
+
+            print(currentCommand, " ", currentArgs)
+            CMDS.commandsDictionary[currentCommand.lower()](scoreList, *currentArgs)
+
+        except KeyError as ke:
+            print("There's no such command.\n")
+        except TypeError as te:
+            print("Invalid list of argument\n")
+        except IndexError as ie:
+            print("Invalid index")
+
+
 main()
