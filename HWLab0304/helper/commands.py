@@ -1,5 +1,8 @@
+import os
+
 import helper.utils as UTILS
 
+##TASK 1
 def addScoreToList(scoreList, s1, s2, s3):
     """
     Add a score pair to list
@@ -10,7 +13,6 @@ def addScoreToList(scoreList, s1, s2, s3):
     try:
         scoreList.append(UTILS.getNewScore(s1, s2, s3))
     except BaseException as be:
-        print(be.args)
         print("Scores are invalid")
 
 def insertScoreToList(scoreList, s1, s2, s3, position):
@@ -26,9 +28,13 @@ def insertScoreToList(scoreList, s1, s2, s3, position):
         if position < 1:
             raise BaseException
         scoreList.insert(position - 1, UTILS.getNewScore(s1, s2, s3))
+        if position > len(scoreList - 1):
+            print("The score will be inserted at the end of the list\
+            \nsince the position is higher than the size of the list.")
     except BaseException as be:
         print("Invalid position or score.")
 
+##TASK 2
 def removeScore(scoreList, posStart, posEnd = None):
     """
     Remove the score pairs in a given range,
@@ -38,37 +44,15 @@ def removeScore(scoreList, posStart, posEnd = None):
     :param posEnd: end position for removing
     :return: nothing
     """
-    try:
+    if validateForRange(scoreList, posStart, posEnd):
         posStart = int(posStart)
         if posEnd == None:
-
-            if posStart > len(scoreList):
-                raise IndexError
-
             posEnd = posStart
 
         posEnd = int(posEnd)
 
-        if posStart < 0 or posStart > posEnd:
-            raise TypeError
-
-        if posEnd > len(scoreList):
-            print("Since the end position is higher than the size of the list\
-                  \nthe entire list was deleted")
-            del scoreList
-            return
-
-        for i in range(posEnd - posStart + 1):
-            del scoreList[posStart - 1]
-
-    except TypeError as te:
-        print("Invalid position")
-    except IndexError as ie:
-        print("The index of the score is out of range.\
-                        \nCurrently, the list contains only", len(scoreList), "elements.\
-                        \nNo changes have been made to the list.")
-    except BaseException as be:
-        print(be.args)
+        for i in range(posStart - 1, posEnd):
+            UTILS.resetScore(scoreList[i])
 
 def replaceScore(scoreList, participant, problemIndex, newScore):
     """
@@ -88,11 +72,15 @@ def replaceScore(scoreList, participant, problemIndex, newScore):
     problemIndex = int(problemIndex[1])
     newScore = int(newScore)
 
-    if participant not in range(0, len(scoreList)) or problemIndex not in range(0, 4):
+    if participant not in range(1, len(scoreList)+1) or problemIndex not in range(1, 4):
         raise IndexError
+    try:
+        UTILS.checkRange(newScore)
+        scoreList[participant - 1][problemIndex - 1] = newScore
+    except ValueError:
+        print("Score is invalid. Try again")
 
-    scoreList[participant - 1][problemIndex - 1] = newScore
-
+##TASK 3
 def printList(scoreList, type=None, comparator=None, value=None):
     """
     Prints the list
@@ -115,7 +103,7 @@ def printList(scoreList, type=None, comparator=None, value=None):
             UTILS.raiseException(KeyError)
 
         l = scoreList[:]
-        l.sort(key = lambda x: (x[0] + x[1] + x[2]) / 3, reverse=True)
+        l.sort(key = lambda x: UTILS.averageScore(x), reverse=True)
 
         print(*l)
         del l
@@ -126,14 +114,65 @@ def printList(scoreList, type=None, comparator=None, value=None):
         if len(l) == 0:
             print("There are no scores with given criteria")
             return
-        print(l)
+        print(*l)
         del l
 
     else:
         UTILS.raiseException(KeyError)
 
+#TASK 4
+def validateForRange(scoreList, posStart, posEnd):
+    try:
+        posStart = int(posStart)
+        if posEnd != None:
+            posEnd = int(posEnd)
+        else:
+            posEnd = posStart
+        if posStart < 1 or posStart > posEnd or posEnd > len(scoreList) or posStart > len(scoreList) or posEnd < 1:
+            raise IndexError
+
+        return True
+    except IndexError as ie:
+        print("The index of the score is out of range.\
+                        \nCurrently, the list contains only", len(scoreList), "elements.\
+                        \nNo changes have been made to the list.")
+        return False
+
+    except BaseException as be:
+        print(be.__cause__)
+        return False
+
+def avgList(scoreList, posStart, posEnd):
+    posStart = int(posStart)
+    posEnd = int(posEnd)
+    if validateForRange(scoreList, posStart, posEnd):
+
+        s = 0
+        for i in range(posStart-1, posEnd):
+            s += UTILS.averageScore(scoreList[i])
+            print(UTILS.averageScore(scoreList[i]))
+
+        s = s / len(scoreList)
+        print(s)
+
+def minList(scoreList, posStart, posEnd):
+    posStart = int(posStart)
+    posEnd = int(posEnd)
+    if validateForRange(scoreList, posStart, posEnd):
+
+        minAvgValue = UTILS.averageScore(scoreList[posStart-1])
+        for i in range(posStart, posEnd):
+            currVal = UTILS.averageScore(scoreList[i])
+
+            if currVal < minAvgValue:
+                minAvgValue = currVal
+
+        print(minAvgValue)
+
 commandsDictionary = {"add" : addScoreToList,
             "insert" : insertScoreToList,
             "remove" : removeScore,
             "replace" : replaceScore,
-            "list" : printList}
+            "list" : printList,
+            "avg": avgList,
+            "min": minList}

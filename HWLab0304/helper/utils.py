@@ -43,8 +43,16 @@ def averageScore(scorePair):
     :param scorePair: the pair which consists of 3 scores ( s1, s2, s3 )
     :return: the average of s1, s2, s3
     """
-    return (scorePair[0] + scorePair[1] + scorePair[2]) / 3
+    #return (scorePair[0] + scorePair[1] + scorePair[2]) / 3
+    s = 0
+    for el in scorePair:
+        s += el
 
+    return s / len(scorePair)
+
+def checkRange(score):
+    if score not in range(0, 101):
+        raise ValueError
 
 def getNewScore(s1, s2, s3):
     """
@@ -57,7 +65,15 @@ def getNewScore(s1, s2, s3):
     s1 = int(s1)
     s2 = int(s2)
     s3 = int(s3)
+    checkRange(s1)
+    checkRange(s2)
+    checkRange(s3)
     return [s1, s2, s3]
 
 def newRand():
     return random.randint(10, 100)
+
+def resetScore(score):
+    score[0] = 0
+    score[1] = 0
+    score[2] = 0

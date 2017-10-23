@@ -12,13 +12,13 @@ managing the list of scores and establishing the winners.
 @author : Gabi
 @email : ytgabi98@gmail.com
 """
-import helper.commands
 import helper.ui_functions as UI
 import helper.utils as UTILS
 import helper.commands as CMDS
 
 def readCommand():
     line = input("\033[96m>>> \033[0m")
+    line = line.lstrip(" ")
     pos = line.find(" ")
 
     if pos == -1:
@@ -30,7 +30,7 @@ def readCommand():
     return cmds, args
 
 def generateScoreList(scoreList):
-    for i in range(30):
+    for i in range(7):
        CMDS.addScoreToList(scoreList, UTILS.newRand(), UTILS.newRand(), UTILS.newRand())
 
 def main():
@@ -55,21 +55,24 @@ def main():
             if currentCommand == "insert":
                 UTILS.removeEl(currentArgs, "at")
 
-            if currentCommand == "remove" and len(currentArgs) > 1:
-                UTILS.removeEl(currentArgs, "to")
+            if currentCommand == "remove":
+                if len(currentArgs) > 1:
+                    UTILS.removeEl(currentArgs, "to")
 
             if currentCommand == "replace":
                 UTILS.removeEl(currentArgs, "with")
 
-            print(currentCommand, " ", currentArgs)
+            if currentCommand in ["avg", "min"]:
+                if len(currentArgs) == 3:
+                    UTILS.removeEl(currentArgs, "to")
+
             CMDS.commandsDictionary[currentCommand.lower()](scoreList, *currentArgs)
 
         except KeyError as ke:
             print("There's no such command.\n")
-        except TypeError as te:
-            print("Invalid list of argument\n")
+        # except TypeError as te:
+        #     print("Invalid list of argument\n")
         except IndexError as ie:
             print("Invalid index")
-
 
 main()
