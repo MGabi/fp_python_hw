@@ -1,19 +1,29 @@
-import os
-
+import helper.ui_functions as UI
 import helper.utils as UTILS
 
 ##TASK 1
-def addScoreToList(scoreList, s1, s2, s3):
+def addScoreToList(scoreList, *scores):
     """
     Add a score pair to list
     :param scoreList: list of scores
     :param score: score pair to be added
     :return: nothing
     """
+    # try:
+    #     scoreList.append(UTILS.getNewScore(s1, s2, s3))
+    # except BaseException as be:
+    #     UI.invalidScores()
+
     try:
-        scoreList.append(UTILS.getNewScore(s1, s2, s3))
+        if not len(scores) % 3 == 0:
+            raise AttributeError
+        for i in range(0, len(scores), 3):
+            scoreList.append(UTILS.getNewScore(scores[i], scores[i+1], scores[i+2]))
+
+    except AttributeError as ae:
+        UI.invalidNumberOrArgs()
     except BaseException as be:
-        print("Scores are invalid")
+        UI.invalidScores()
 
 def insertScoreToList(scoreList, s1, s2, s3, position):
     """
@@ -35,24 +45,66 @@ def insertScoreToList(scoreList, s1, s2, s3, position):
         print("Invalid position or score.")
 
 ##TASK 2
-def removeScore(scoreList, posStart, posEnd = None):
+# def removeScore(scoreList, posStart, posEnd = None):
+#     """
+#     Remove the score pairs in a given range,
+#     or at a certain position if posEnd is not specified
+#     :param scoreList: list of scores
+#     :param posStart: start position for removing
+#     :param posEnd: end position for removing
+#     :return: nothing
+#     """
+#     if validateForRange(scoreList, posStart, posEnd):
+#         posStart = int(posStart)
+#         if posEnd == None:
+#             posEnd = posStart
+#
+#         posEnd = int(posEnd)
+#
+#         for i in range(posStart - 1, posEnd):
+#             UTILS.resetScore(scoreList[i])
+
+def removeScore(scoreList, *positions):
     """
     Remove the score pairs in a given range,
     or at a certain position if posEnd is not specified
     :param scoreList: list of scores
-    :param posStart: start position for removing
-    :param posEnd: end position for removing
+    :param positions: positions that needs to be reseted
     :return: nothing
     """
-    if validateForRange(scoreList, posStart, posEnd):
+    posStart = 0
+    posEnd = None
+    positions = list(positions)
+    try:
+        UTILS.checkAllNumeric(positions)
+    except ValueError as ve:
+        UI.invalidIndex()
+        return
+
+    if len(positions) == 1:
+        posStart = positions[0]
         posStart = int(posStart)
-        if posEnd == None:
-            posEnd = posStart
+        if validateForRange(scoreList, posStart, posEnd):
+            UTILS.resetScore(scoreList[posStart - 1])
 
-        posEnd = int(posEnd)
+    elif len(positions) == 2:
+        posStart = positions[0]
+        posEnd = positions[1]
+        if validateForRange(scoreList, posStart, posEnd):
+            posStart = int(posStart)
+            if posEnd == None:
+                posEnd = posStart
 
-        for i in range(posStart - 1, posEnd):
-            UTILS.resetScore(scoreList[i])
+            posEnd = int(posEnd)
+
+            for i in range(posStart - 1, posEnd):
+                UTILS.resetScore(scoreList[i])
+    else:
+        for s in positions:
+            posStart = s
+            posStart = int(posStart)
+            if validateForRange(scoreList, posStart, posEnd):
+                UTILS.resetScore(scoreList[posStart - 1])
 
 def replaceScore(scoreList, participant, problemIndex, newScore):
     """
@@ -78,7 +130,7 @@ def replaceScore(scoreList, participant, problemIndex, newScore):
         UTILS.checkRange(newScore)
         scoreList[participant - 1][problemIndex - 1] = newScore
     except ValueError:
-        print("Score is invalid. Try again")
+        UI.invalidScores()
 
 ##TASK 3
 def printList(scoreList, type=None, comparator=None, value=None):
@@ -112,7 +164,7 @@ def printList(scoreList, type=None, comparator=None, value=None):
     elif type == 1:
         l = [el for el in scoreList if UTILS.compareWithOperator(el, comparator, value)]
         if len(l) == 0:
-            print("There are no scores with given criteria")
+            UI.noCriteria()
             return
         print(*l)
         del l
@@ -122,6 +174,15 @@ def printList(scoreList, type=None, comparator=None, value=None):
 
 #TASK 4
 def validateForRange(scoreList, posStart, posEnd):
+    """
+    Validates the fact that start position and end position
+    fits in the scoreList size and if they are properly transmitted
+    for a certain operation ( e.g. removing from a given range )
+    :param scoreList: score list
+    :param posStart: start position
+    :param posEnd: end position
+    :return: true if the positions fit the above criterias, false if not
+    """
     try:
         posStart = int(posStart)
         if posEnd != None:
@@ -133,16 +194,21 @@ def validateForRange(scoreList, posStart, posEnd):
 
         return True
     except IndexError as ie:
-        print("The index of the score is out of range.\
-                        \nCurrently, the list contains only", len(scoreList), "elements.\
-                        \nNo changes have been made to the list.")
+        UI.indexOutOfRange(scoreList)
         return False
 
     except BaseException as be:
-        print(be.__cause__)
+        print(type(be))
         return False
 
 def avgList(scoreList, posStart, posEnd):
+    """
+    Calculate the average value of scores from 2 positions in list
+    :param scoreList: scores list
+    :param posStart: start position
+    :param posEnd: end position
+    :return: average value of scores
+    """
     posStart = int(posStart)
     posEnd = int(posEnd)
     if validateForRange(scoreList, posStart, posEnd):
@@ -156,6 +222,14 @@ def avgList(scoreList, posStart, posEnd):
         print(s)
 
 def minList(scoreList, posStart, posEnd):
+    """
+    Calculate the minimum average value of participants scores
+    from a given range in scores list
+    :param scoreList: scores list
+    :param posStart: start position
+    :param posEnd: end position
+    :return: minimum value from a given range
+    """
     posStart = int(posStart)
     posEnd = int(posEnd)
     if validateForRange(scoreList, posStart, posEnd):
@@ -169,6 +243,10 @@ def minList(scoreList, posStart, posEnd):
 
         print(minAvgValue)
 
+"""
+A dictionary containing references to
+certain functions based on user input
+"""
 commandsDictionary = {"add" : addScoreToList,
             "insert" : insertScoreToList,
             "remove" : removeScore,

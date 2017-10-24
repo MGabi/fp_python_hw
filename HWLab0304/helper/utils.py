@@ -1,6 +1,9 @@
 import _operator
 import random
 
+"""
+Mathematical operators for filtering a list
+"""
 operators = {
     "=": _operator.eq,
     "<": _operator.lt,
@@ -22,6 +25,8 @@ def removeEl(argList, el):
     """
     if el in argList:
         argList.remove(el)
+    elif el == "to":
+        pass
     else:
         raiseException(TypeError)
 
@@ -51,6 +56,11 @@ def averageScore(scorePair):
     return s / len(scorePair)
 
 def checkRange(score):
+    """
+    Checks if a score is in the correct range
+    :param score: score that needs approval
+    :return: nothing, raise and error if something's wrong
+    """
     if score not in range(0, 101):
         raise ValueError
 
@@ -74,6 +84,16 @@ def newRand():
     return random.randint(10, 100)
 
 def resetScore(score):
+    """
+    Resets the score for a participant to 0
+    :param score: score that need to be reseted
+    :return: nothing
+    """
     score[0] = 0
     score[1] = 0
     score[2] = 0
+
+
+def checkAllNumeric(positions):
+    for i in range(len(positions)):
+        positions[i] = int(positions[i])

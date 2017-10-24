@@ -16,8 +16,13 @@ import helper.ui_functions as UI
 import helper.utils as UTILS
 import helper.commands as CMDS
 
-def readCommand():
-    line = input("\033[96m>>> \033[0m")
+def parseCommand(line):
+    """
+    Get the user input as a parameter and will
+    separate the command and arguments,
+    returning them
+    :return: the command and arguments typed by user
+    """
     line = line.lstrip(" ")
     pos = line.find(" ")
 
@@ -30,17 +35,29 @@ def readCommand():
     return cmds, args
 
 def generateScoreList(scoreList):
-    for i in range(7):
+    """
+    Generate a list of random scores
+    for some participants
+    :param scoreList:
+    :return: nothing
+    """
+    for i in range(10):
        CMDS.addScoreToList(scoreList, UTILS.newRand(), UTILS.newRand(), UTILS.newRand())
 
 def main():
+    """
+    The main functions.
+    Handle the input of the user and
+    call required methods based on user input
+    :return: nothing
+    """
     UI.printAvailableCommands()
     UI.needCommand()
     scoreList = []
     generateScoreList(scoreList)
 
     while True:
-        currentCommand, currentArgs = readCommand()
+        currentCommand, currentArgs = parseCommand(input("\033[96m>>> \033[0m"))
 
         if currentCommand == "exit":
             break
@@ -69,10 +86,10 @@ def main():
             CMDS.commandsDictionary[currentCommand.lower()](scoreList, *currentArgs)
 
         except KeyError as ke:
-            print("There's no such command.\n")
+            UI.noSuchCommand()
         # except TypeError as te:
         #     print("Invalid list of argument\n")
         except IndexError as ie:
-            print("Invalid index")
+            UI.invalidIndex()
 
 main()
