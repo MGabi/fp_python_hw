@@ -41,7 +41,7 @@ def generateScoreList(scoreList):
     :param scoreList:
     :return: nothing
     """
-    for i in range(10):
+    for i in range(3):
        CMDS.addScoreToList(scoreList, UTILS.newRand(), UTILS.newRand(), UTILS.newRand())
 
 def main():
@@ -54,6 +54,7 @@ def main():
     UI.printAvailableCommands()
     UI.needCommand()
     scoreList = []
+    backupList = []
     generateScoreList(scoreList)
 
     while True:
@@ -63,6 +64,7 @@ def main():
             break
 
         try:
+            currentCommand.lower()
             if currentCommand == "list" and len(currentArgs) > 1:
                 if currentArgs[0] in UTILS.ops:
                     currentArgs.insert(0, 1)
@@ -83,13 +85,21 @@ def main():
                 if len(currentArgs) == 3:
                     UTILS.removeEl(currentArgs, "to")
 
-            CMDS.commandsDictionary[currentCommand.lower()](scoreList, *currentArgs)
+            if currentCommand not in ["list", "undo"]:
+                UTILS.makeBackup(scoreList, backupList)
+
+            if currentCommand == "undo":
+                CMDS.commandsDictionary[currentCommand](scoreList, backupList)
+            else:
+                CMDS.commandsDictionary[currentCommand](scoreList, *currentArgs)
 
         except KeyError as ke:
             UI.noSuchCommand()
-        # except TypeError as te:
-        #     print("Invalid list of argument\n")
+        except TypeError as te:
+            UI.invalidNumberOrArgs()
         except IndexError as ie:
             UI.invalidIndex()
+        except ValueError as ve:
+            UI.invalidArgs()
 
 main()

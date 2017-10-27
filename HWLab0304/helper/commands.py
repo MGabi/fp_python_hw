@@ -38,31 +38,13 @@ def insertScoreToList(scoreList, s1, s2, s3, position):
         if position < 1:
             raise BaseException
         scoreList.insert(position - 1, UTILS.getNewScore(s1, s2, s3))
-        if position > len(scoreList - 1):
+        if position > len(scoreList) - 1:
             print("The score will be inserted at the end of the list\
             \nsince the position is higher than the size of the list.")
     except BaseException as be:
         print("Invalid position or score.")
 
 ##TASK 2
-# def removeScore(scoreList, posStart, posEnd = None):
-#     """
-#     Remove the score pairs in a given range,
-#     or at a certain position if posEnd is not specified
-#     :param scoreList: list of scores
-#     :param posStart: start position for removing
-#     :param posEnd: end position for removing
-#     :return: nothing
-#     """
-#     if validateForRange(scoreList, posStart, posEnd):
-#         posStart = int(posStart)
-#         if posEnd == None:
-#             posEnd = posStart
-#
-#         posEnd = int(posEnd)
-#
-#         for i in range(posStart - 1, posEnd):
-#             UTILS.resetScore(scoreList[i])
 
 def removeScore(scoreList, *positions):
     """
@@ -76,12 +58,23 @@ def removeScore(scoreList, *positions):
     posEnd = None
     positions = list(positions)
     try:
-        UTILS.checkAllNumeric(positions)
+        if positions[0] not in UTILS.ops:
+            UTILS.checkAllNumeric(positions)
     except ValueError as ve:
         UI.invalidIndex()
         return
 
-    if len(positions) == 1:
+    if positions[0] in UTILS.ops:
+        if len(positions) == 2:
+            score = int(positions[1])
+            UTILS.checkRange(score)
+            for i in range(len(scoreList)):
+                if UTILS.compareWithOperator(scoreList[i], positions[0], score):
+                    UTILS.resetScore(scoreList[i])
+        else:
+            raise KeyError
+
+    elif len(positions) == 1:
         posStart = positions[0]
         posStart = int(posStart)
         if validateForRange(scoreList, posStart, posEnd):
@@ -101,8 +94,7 @@ def removeScore(scoreList, *positions):
                 UTILS.resetScore(scoreList[i])
     else:
         for s in positions:
-            posStart = s
-            posStart = int(posStart)
+            posStart = int(s)
             if validateForRange(scoreList, posStart, posEnd):
                 UTILS.resetScore(scoreList[posStart - 1])
 
@@ -146,7 +138,7 @@ def printList(scoreList, type=None, comparator=None, value=None):
     """
     #normal printing
     if type == None:
-        print(*scoreList)
+        UI.printListOnScreen(scoreList)
 
     #sorted in decreasing order and printed
     elif type == "sorted":
@@ -155,9 +147,8 @@ def printList(scoreList, type=None, comparator=None, value=None):
             UTILS.raiseException(KeyError)
 
         l = scoreList[:]
-        l.sort(key = lambda x: UTILS.averageScore(x), reverse=True)
-
-        print(*l)
+        UTILS.sortList(l, True)
+        UI.printListOnScreen(l)
         del l
 
     #printed with a given criteria
@@ -166,7 +157,7 @@ def printList(scoreList, type=None, comparator=None, value=None):
         if len(l) == 0:
             UI.noCriteria()
             return
-        print(*l)
+        UI.printListOnScreen(l)
         del l
 
     else:
@@ -216,9 +207,9 @@ def avgList(scoreList, posStart, posEnd):
         s = 0
         for i in range(posStart-1, posEnd):
             s += UTILS.averageScore(scoreList[i])
-            print(UTILS.averageScore(scoreList[i]))
+            #print(UTILS.averageScore(scoreList[i]))
 
-        s = s / len(scoreList)
+        s = s / posEnd - posStart + 1
         print(s)
 
 def minList(scoreList, posStart, posEnd):
@@ -243,6 +234,30 @@ def minList(scoreList, posStart, posEnd):
 
         print(minAvgValue)
 
+#TASK 5
+def topList(scoreList, topN, problem = None):
+    topN = int(topN)
+    index = 0
+    l = scoreList[:]
+    UTILS.checkInList(scoreList, topN)
+    if problem != None:
+        index = int(problem[1])
+        UTILS.checkPIndex(index)
+        UTILS.sortListWithIndex(l, True, index)
+    else:
+        UTILS.sortList(l, True)
+
+    UI.printListOnScreen(l, topN)
+    del l
+
+#TASK 6
+def undoFunc(scoreList, backupList):
+    if len(backupList) != 0:
+        scoreList[:] = backupList.pop()[:]
+    else:
+        UI.cantUndo()
+
+
 """
 A dictionary containing references to
 certain functions based on user input
@@ -253,4 +268,6 @@ commandsDictionary = {"add" : addScoreToList,
             "replace" : replaceScore,
             "list" : printList,
             "avg": avgList,
-            "min": minList}
+            "min": minList,
+            "top": topList,
+            "undo": undoFunc}

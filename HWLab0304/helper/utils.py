@@ -1,6 +1,8 @@
 import _operator
 import random
 
+from copy import deepcopy
+
 """
 Mathematical operators for filtering a list
 """
@@ -95,5 +97,30 @@ def resetScore(score):
 
 
 def checkAllNumeric(positions):
+    """
+    Checks if all positions are integers
+    :param positions:
+    :return:
+    """
     for i in range(len(positions)):
         positions[i] = int(positions[i])
+
+
+def sortList(l, type):
+    l.sort(key = lambda x: averageScore(x), reverse = type)
+
+def sortListWithIndex(l, type, pIndex):
+    l.sort(key = lambda x: x[pIndex-1], reverse = type)
+
+def checkInList(scoreList, topN):
+    if topN not in range(1, len(scoreList) + 1):
+        raise TypeError
+
+
+def checkPIndex(pIndex):
+
+    if pIndex not in range(1, 4):
+        raise TypeError
+
+def makeBackup(scoreList, backupList):
+    backupList.append(deepcopy(scoreList))
