@@ -95,16 +95,15 @@ def resetScore(score):
     score[1] = 0
     score[2] = 0
 
-
 def checkAllNumeric(positions):
     """
     Checks if all positions are integers
+    raise an exception if something's wrong
     :param positions:
-    :return:
+    :return: nothing
     """
     for i in range(len(positions)):
         positions[i] = int(positions[i])
-
 
 def sortList(l, type):
     l.sort(key = lambda x: averageScore(x), reverse = type)
@@ -115,7 +114,6 @@ def sortListWithIndex(l, type, pIndex):
 def checkInList(scoreList, topN):
     if topN not in range(1, len(scoreList) + 1):
         raise TypeError
-
 
 def checkPIndex(pIndex):
 

@@ -1,5 +1,6 @@
-import helper.ui_functions as UI
 import helper.utils as UTILS
+import ui.ui_functions as UI
+
 
 ##TASK 1
 def addScoreToList(scoreList, *scores):
