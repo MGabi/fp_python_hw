@@ -35,15 +35,15 @@ def parseCommand(line):
 
     return cmds, args
 
-def generateScoreList(scoreList):
+def generateScoreList(scoreList, backupList):
     """
     Generate a list of random scores
     for some participants
     :param scoreList:
     :return: nothing
     """
-    for i in range(3):
-       CMDS.addScoreToList(scoreList, UTILS.newRand(), UTILS.newRand(), UTILS.newRand())
+    for i in range(12):
+        CMDS.addScoreToList(scoreList, UTILS.newRand(), UTILS.newRand(), UTILS.newRand())
 
 def main():
     """
@@ -56,7 +56,7 @@ def main():
     UI.needCommand()
     scoreList = []
     backupList = []
-    generateScoreList(scoreList)
+    generateScoreList(scoreList, backupList)
 
     while True:
         currentCommand, currentArgs = parseCommand(input("\033[96m>>> \033[0m"))
@@ -103,7 +103,7 @@ def main():
         except ValueError as ve:
             UI.invalidArgs()
 
-#main()
+main()
 
 
 def test_parse():
@@ -181,4 +181,4 @@ def test_all():
     test_reset_score()
     test_make_backup()
 
-test_all()
+#test_all()
