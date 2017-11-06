@@ -3,8 +3,13 @@
     @email:  ytgabi98@gmail.com
     @date:   11/2/2017 23:15
 """
+import domain.entities.keywords as KEYWORDS
 class Client:
-
+    """
+    This class holds data for a certain client from the store
+    @__clientID : INT
+    @__clientName: String
+    """
     def __init__(self, clientID, clientName):
         self.__clientID = clientID
         self.__clientName = clientName
@@ -23,7 +28,5 @@ class Client:
         self.__clientName = clientName
 
     def getAttrs(self):
-        attrs = []
-        attrs.append(self.getClientId())
-        attrs.append(self.getClientName())
-        return attrs
+        return {KEYWORDS.client_id: self.getClientId(),
+                KEYWORDS.client_name: self.getClientName()}
