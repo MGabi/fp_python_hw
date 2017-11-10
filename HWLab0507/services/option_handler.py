@@ -11,8 +11,8 @@ from ui.menu import *
 from _datetime import datetime
 
 #optionsLen = len(options)
-optionsLen = 6
-availableListsLen = 2
+optionsLen = 10
+availableListsLen = 3
 
 def optionAdd(store, listNumber):
     """
@@ -23,9 +23,9 @@ def optionAdd(store, listNumber):
     :return: nothing
     """
     if listNumber == 1:
-        store.addClient(getNewClientFromConsole())
+        store.addToList(1, getNewClientFromConsole())
     elif listNumber == 2:
-        store.addMovie(getNewMovieFromConsole())
+        store.addToList(2, getNewMovieFromConsole())
 
 
 def optionRemove(store, listNumber):
@@ -38,9 +38,9 @@ def optionRemove(store, listNumber):
     :return: nothing
     """
     if listNumber == 1:
-        store.removeClient(getIndexFromConsole(len(store.clientsList), inputPromptForRemovalIndex(len(store.clientsList))))
+        store.removeFromList(1, getIndexFromConsole(len(store.clientsList),inputPromptForRemovalIndex(len(store.clientsList))))
     elif listNumber == 2:
-        store.removeMovie(getIndexFromConsole(len(store.moviesList), inputPromptForRemovalIndex(len(store.moviesList))))
+        store.removeFromList(2, getIndexFromConsole(len(store.moviesList), inputPromptForRemovalIndex(len(store.moviesList))))
 
 def optionUpdate(store, listNumber):
     """
@@ -51,11 +51,11 @@ def optionUpdate(store, listNumber):
     :return:
     """
     if listNumber == 1:
-        index = getIndexFromConsole(len(store.clientsList), inputPromptForUpdateIndex(len(store.clientsList)))
-        store.clientsList[index] = getNewClientFromConsole()
+        index = getIndexFromConsole(len(store.getClientsList()), inputPromptForUpdateIndex(len(store.getClientsList())))
+        store.updateList(1, getNewClientFromConsole(), index)
     elif listNumber == 2:
-        index = getIndexFromConsole(len(store.moviesList), inputPromptForUpdateIndex(len(store.moviesList)))
-        store.moviesList[index] = getNewMovieFromConsole()
+        index = getIndexFromConsole(len(store.getMoviesList()), inputPromptForUpdateIndex(len(store.getMoviesList())))
+        store.updateList(2, getNewMovieFromConsole(), index)
 
 def optionList(store, listNumber):
     """
@@ -81,12 +81,9 @@ def optionRent(store):
     if validateUserRentalStatus(clientID, store.getRentalsList()):
         movie = getDesiredMovieForRent(store.getMoviesList())
         currTime = datetime.now().timestamp()
-        #newRentID = store.getRentalsList()[len(store.getRentalsList())-1][KEYWORDS.rental_id]
-        newRentID = 11
-        store.addRental(Rental(newRentID, movie.getMovieID(), clientID, currTime, currTime + getSecFromDays(14), None))
+        newRentID = getNextIndex(store.getRentalsList(), KEYWORDS.rental_id)
+        store.addToList(3, Rental(newRentID, movie.getMovieID(), clientID, currTime, currTime + getSecFromDays(14), None))
         printListOfEntities(store.getRentalsList())
-    else:
-        clientCannotRent()
 
 def optionReturn(store):
     print("in opReturn")

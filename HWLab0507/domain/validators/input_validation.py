@@ -40,7 +40,7 @@ def validateInRange(index, listLen):
     """
     try:
         index = int(index)
-        if index not in range(1, listLen+1):
+        if index not in range(0, listLen):
             raise OutOfRangeError
         return True
     except ValueError as ve:
@@ -71,6 +71,7 @@ def validateUserRentalStatus(clientID, rentalsList):
         rentalAttrs = rental.getAttrs()
         if rentalAttrs[KEYWORDS.client_id] == clientID:
             if not verifyDueDate(rentalAttrs[KEYWORDS.due_date]):
+                clientCannotRent()
                 return False
     return True
 
