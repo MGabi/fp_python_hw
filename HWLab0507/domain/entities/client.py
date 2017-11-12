@@ -4,7 +4,10 @@
     @date:   11/12/2017 12:48
 """
 class Client(object):
-
+    """
+    This class holds data
+    for a client object
+    """
     def __init__(self, clientID, clientNAME):
         self.__clientID = clientID
         self.__clientNAME = clientNAME

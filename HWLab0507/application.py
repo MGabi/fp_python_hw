@@ -16,6 +16,10 @@ from ui.console import Console
 
 
 def run_application():
+    """
+    The main method of the application
+    :return: nothing
+    """
     try:
         clientManager = DataManager(ClientValidator)
         movieManager = DataManager(MovieValidator)

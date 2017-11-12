@@ -4,7 +4,10 @@
     @date:   11/12/2017 12:43
 """
 class Movie(object):
-
+    """
+    This class holds data
+    for a movie object
+    """
     def __init__(self, movieID, movieTITLE, movieDESCRIPTION, movieGENRE):
         self.__movieID = movieID
         self.__movieTITLE = movieTITLE

@@ -4,6 +4,10 @@
     @date:   11/12/2017 12:50
 """
 class Rental(object):
+    """
+    This class holds data
+    for a rental object
+    """
 
     def __init__(self, rentalID, movieID, clientID, rentedDATE, dueDATE, returnedDATE):
         self.__rentalID = rentalID

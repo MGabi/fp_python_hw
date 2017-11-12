@@ -3,8 +3,14 @@
     @email:  ytgabi98@gmail.com
     @date:   11/12/2017 17:12
 """
+from datetime import datetime
+
+
 class Utils(object):
 
+    """
+    Some keywords used in the entire app
+    """
     CLIENT_ID = "clientID"
     CLIENT_NAME = "clientNAME"
     MOVIE_ID = "movieID"
@@ -24,3 +30,12 @@ class Utils(object):
                 "rental_id": RENTAL_ID,
                 "rented_date": RENTED_DATE,
                 "returned_date": RETURNED_DATE}
+
+    @staticmethod
+    def dateFromStr(date):
+        """
+        Converts date from DD/MM/YYY format to timestamp
+        :param date: a date in string format as DD/MM/YYY
+        :return: float value of the date timestamp
+        """
+        return datetime.strptime(date, "%d/%m/%Y").timestamp()

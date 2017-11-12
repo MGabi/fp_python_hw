@@ -4,18 +4,14 @@
     @date:   11/12/2017 14:08
 """
 import traceback
-from datetime import datetime
 from random import randint
 from services.utils import *
 from ui.console_helper import ConsoleHelper
 
-
-def dateFromStr(date):
-    return datetime.strptime(date, "%d/%m/%Y").timestamp()
-
-
 class Console(object):
-
+    """
+    The main class which communicate with the user
+    """
     def __init__(self, clientService, movieService, rentalService):
         self.__clientService = clientService
         self.__movieService = movieService
@@ -33,10 +29,19 @@ class Console(object):
         self.__consoleHelper = ConsoleHelper()
 
     def opExit(self):
+        """
+        Close the application when called
+        :return: nothing
+        """
         import sys
         sys.exit()
 
     def opAdd(self):
+        """
+        This function will proceed to the service module for adding a new entity
+        to the list after getting the object data from console
+        :return: nothing
+        """
         self.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(3, 1)
@@ -50,6 +55,11 @@ class Console(object):
             self.__consoleHelper.printError(*ex.args)
 
     def opRemove(self):
+        """
+        This function will proceed to the service module for removing
+        a certain entity with a given ID from the console
+        :return: nothing
+        """
         self.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(2, 1)
@@ -61,6 +71,11 @@ class Console(object):
             self.__consoleHelper.printError(*ex.args)
 
     def opUpdate(self):
+        """
+        This function will proceed to the service module for an update on a
+        given position for a client/movie after receiving data from console
+        :return: nothing
+        """
         self.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(2, 1)
@@ -72,6 +87,11 @@ class Console(object):
             self.__consoleHelper.printError(*ex.args)
 
     def opList(self):
+        """
+        This method will print the selected list after getting
+        the ID from the console
+        :return:
+        """
         self.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(3, 1)
@@ -100,6 +120,12 @@ class Console(object):
         pass
 
     def startConsole(self):
+        """
+        The start point of this class
+        Prints the menu, reads every command
+        and execute it as needed using a command dictionary
+        :return:
+        """
         self.addClientsMoviesRentals()
         self.printHeader()
         consoleHelper = self.__consoleHelper
@@ -112,9 +138,13 @@ class Console(object):
                 consoleHelper.printError(*ex.args)
                 #traceback.print_exc()
 
-        #TODO: menu things
-
     def printAllOf(self, type, elements):
+        """
+        Print a list of clients/movies/rentals
+        :param type: the header of the printing: e.g. Clients / Movies / Rentals
+        :param elements: the list that will be printed
+        :return: nothing
+        """
         print(type, ":")
         for c in elements.values():
             print(c.attrs)
@@ -152,4 +182,4 @@ class Console(object):
             self.__movieService.addMovie({Utils.MOVIE_ID: i, Utils.MOVIE_TITLE: "Title" + str(i), Utils.MOVIE_DESCRIPTION: "Desc" + str(i), Utils.MOVIE_GENRE: "Genre" + str(i)})
 
         for i in range(0, 6):
-            self.__rentalService.addRental({Utils.RENTAL_ID: i, Utils.MOVIE_ID: randint(1, 10), Utils.CLIENT_ID: randint(1, 10), Utils.RENTED_DATE: dateFromStr(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2017))), Utils.DUE_DATE: datetime.now().timestamp(), Utils.RETURNED_DATE: None})
+            self.__rentalService.addRental({Utils.RENTAL_ID: i, Utils.MOVIE_ID: randint(1, 10), Utils.CLIENT_ID: randint(1, 10), Utils.RENTED_DATE: Utils.dateFromStr(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2017))), Utils.DUE_DATE: datetime.now().timestamp(), Utils.RETURNED_DATE: None})
