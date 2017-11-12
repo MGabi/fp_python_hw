@@ -1,75 +1,66 @@
 """
     @author: Matko Gabriel
     @email:  ytgabi98@gmail.com
-    @date:   11/2/2017 23:18
+    @date:   11/12/2017 12:50
 """
-import domain.entities.keywords as KEYWORDS
+class Rental(object):
 
-class Rental:
-    """
-    This class holds data for a certain rental from the store
-    @__rentalID : INT
-    @__movieID : INT
-    @__clientID : INT
-    @__rentedDate : FLOAT (timestamp)
-    @__dueDate : FLOAT (timestamp)
-    @__returnedDate : FLOAT (timestamp)
-    """
-    def __init__(self, rentalID, movieID, clientID, rentedDate, dueDate, returnedDate):
+    def __init__(self, rentalID, movieID, clientID, rentedDATE, dueDATE, returnedDATE):
         self.__rentalID = rentalID
         self.__movieID = movieID
         self.__clientID = clientID
-        self.__rentedDate = rentedDate
-        self.__dueDate = dueDate
-        self.__returnedDate = returnedDate
+        self.__rentedDATE = rentedDATE
+        self.__dueDATE = dueDATE
+        self.__returnedDATE = returnedDATE
 
-    def getRentalID(self):
+    @property
+    def ID(self):
         return self.__rentalID
 
-    def setRentalID(self, rentalID):
-        self.__rentalID = rentalID
+    @ID.setter
+    def ID(self, ID):
+        self.__rentalID = ID
 
-
-    def getMovieID(self):
+    @property
+    def movieID(self):
         return self.__movieID
 
-    def setMovieID(self, movieID):
+    @movieID.setter
+    def movieID(self, movieID):
         self.__movieID = movieID
 
-
-    def getClientID(self):
+    @property
+    def clientID(self):
         return self.__clientID
 
-    def setClientID(self, clientID):
+    @clientID.setter
+    def clientID(self, clientID):
         self.__clientID = clientID
 
+    @property
+    def rentedDATE(self):
+        return self.__rentedDATE
 
-    def getRentedDate(self):
-        return self.__rentedDate
+    @rentedDATE.setter
+    def rentedDATE(self, rentedDATE):
+        self.__rentedDATE = rentedDATE
 
-    def setRentedDate(self, rentedDate):
-        self.__rentedDate = rentedDate
+    @property
+    def dueDATE(self):
+        return self.__dueDATE
 
+    @dueDATE.setter
+    def dueDATE(self, dueDATE):
+        self.__dueDATE = dueDATE
 
-    def getDueDate(self):
-        return self.__dueDate
+    @property
+    def returnedDATE(self):
+        return self.__returnedDATE
 
-    def setDueDate(self, dueDate):
-        self.__dueDate = dueDate
+    @returnedDATE.setter
+    def returnedDATE(self, returnedDATE):
+        self.__returnedDATE = returnedDATE
 
-
-    def getReturnedDate(self):
-        return self.__returnedDate
-
-    def setReturnedDate(self, returnedDate):
-        self.__returnedDate = returnedDate
-
-
-    def getAttrs(self):
-        attrs = {KEYWORDS.rental_id: self.getRentalID(),
-                KEYWORDS.movie_id: self.getMovieID(),
-                KEYWORDS.client_id: self.getClientID(),
-                KEYWORDS.rented_date: self.getRentedDate(),
-                KEYWORDS.due_date: self.getDueDate(),
-                KEYWORDS.returned_date: self.getReturnedDate()}
-        return attrs
+    @property
+    def attrs(self):
+        return [self.ID, self.movieID, self.clientID, self.rentedDATE, self.dueDATE, self.returnedDATE]

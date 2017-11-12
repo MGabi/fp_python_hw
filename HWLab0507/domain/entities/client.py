@@ -1,32 +1,30 @@
 """
     @author: Matko Gabriel
     @email:  ytgabi98@gmail.com
-    @date:   11/2/2017 23:15
+    @date:   11/12/2017 12:48
 """
-import domain.entities.keywords as KEYWORDS
-class Client:
-    """
-    This class holds data for a certain client from the store
-    @__clientID : INT
-    @__clientName: String
-    """
-    def __init__(self, clientID, clientName):
-        self.__clientID = clientID
-        self.__clientName = clientName
+class Client(object):
 
-    def getClientId(self):
+    def __init__(self, clientID, clientNAME):
+        self.__clientID = clientID
+        self.__clientNAME = clientNAME
+
+    @property
+    def ID(self):
         return self.__clientID
 
-    def setClientId(self, clientID):
+    @ID.setter
+    def ID(self, clientID):
         self.__clientID = clientID
 
+    @property
+    def clientNAME(self):
+        return self.__clientNAME
 
-    def getClientName(self):
-        return self.__clientName
+    @clientNAME.setter
+    def clientNAME(self, clientNAME):
+        self.__clientNAME = clientNAME
 
-    def setClientName(self, clientName):
-        self.__clientName = clientName
-
-    def getAttrs(self):
-        return {KEYWORDS.client_id: self.getClientId(),
-                KEYWORDS.client_name: self.getClientName()}
+    @property
+    def attrs(self):
+        return [self.__clientID, self.__clientNAME]

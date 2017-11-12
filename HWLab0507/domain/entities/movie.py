@@ -1,52 +1,48 @@
 """
     @author: Matko Gabriel
     @email:  ytgabi98@gmail.com
-    @date:   11/2/2017 23:05
+    @date:   11/12/2017 12:43
 """
-import domain.entities.keywords as KEYWORDS
-class Movie:
-    """
-    This class holds data for a certain movie from the store
-    @__movieID : INT
-    @__movieTitle : STRING
-    @__movieDescription : STRING
-    @__movieGenre : STRING
-    """
-    def __init__(self, movieId, movieTitle, movieDescription, movieGenre):
-        self.__movieId = movieId
-        self.__movieTitle = movieTitle
-        self.__movieDescription = movieDescription
-        self.__movieGenre = movieGenre
+class Movie(object):
 
-    def getMovieID(self):
-        return self.__movieId
+    def __init__(self, movieID, movieTITLE, movieDESCRIPTION, movieGENRE):
+        self.__movieID = movieID
+        self.__movieTITLE = movieTITLE
+        self.__movieDESCRIPTION = movieDESCRIPTION
+        self.__movieGENRE = movieGENRE
 
-    def setMovieID(self, movieId):
-        self.__movieId = movieId
+    @property
+    def ID(self):
+        return self.__movieID
 
-    def getMovieTitle(self):
-        return self.__movieTitle
+    @ID.setter
+    def ID(self, ID):
+        self.__movieID = ID
 
-    def setMovieTitle(self, movieTitle):
-        self.__movieTitle = movieTitle
+    @property
+    def movieTITLE(self):
+        return self.__movieTITLE
 
+    @movieTITLE.setter
+    def movieTITLE(self, movieTITLE):
+        self.__movieTITLE = movieTITLE
 
-    def getMovieDescription(self):
-        return self.__movieDescription
+    @property
+    def movieDESCRIPTION(self):
+        return self.__movieDESCRIPTION
 
-    def setMovieDescription(self, movieDescription):
-        self.__movieDescription = movieDescription
+    @movieDESCRIPTION.setter
+    def movieDESCRIPTION(self, movieDESCRIPTION):
+        self.__movieDESCRIPTION = movieDESCRIPTION
 
+    @property
+    def movieGENRE(self):
+        return self.__movieGENRE
 
-    def getMovieGenre(self):
-        return self.__movieGenre
+    @movieGENRE.setter
+    def movieGENRE(self, movieGENRE):
+        self.__movieGENRE = movieGENRE
 
-    def setMovieGenre(self, movieGenre):
-        self.__movieGenre = movieGenre
-
-
-    def getAttrs(self):
-        return {KEYWORDS.movie_id: self.getMovieID(),
-                KEYWORDS.movie_title: self.getMovieTitle(),
-                KEYWORDS.movie_description: self.getMovieDescription(),
-                KEYWORDS.movie_genre: self.getMovieGenre()}
+    @property
+    def attrs(self):
+        return [self.ID, self.movieTITLE, self.movieDESCRIPTION, self.movieGENRE]
