@@ -5,6 +5,9 @@
 """
 import traceback
 from random import randint
+
+from domain.entities.rental import Rental
+from domain.validators.other_validations import *
 from services.utils import *
 from ui.console_helper import ConsoleHelper
 
@@ -105,10 +108,27 @@ class Console(object):
             self.__consoleHelper.printError(*ex.args)
 
     def opRentMovie(self):
-        pass
+        try:
+            rentalAttrs = self.__consoleHelper.readRental()
+            ValidateUserRentalStatus.validate(rentalAttrs[Utils.CLIENT_ID], self.__rentalService.getAllRentals(), rentalAttrs[Utils.MOVIE_ID])
+            ValidateMovieCanBeRented.validate(rentalAttrs[Utils.MOVIE_ID], self.__movieService.getAllMovies())
+            self.__rentalService.addRental(rentalAttrs)
+        except Exception as ex:
+            self.__consoleHelper.printError(*ex.args)
 
     def opReturnMovie(self):
-        pass
+        try:
+            returnAttrs = self.__consoleHelper.getReturnData()
+            rental = self.__rentalService.getRentalWithIDs(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID])
+            if rental is not None:
+                if rental.returnedDATE is not None:
+                    raise Exception("The rental with id {0} was already finished!".format(rental.ID))
+                self.__rentalService.finishRental(rental)
+            else:
+                raise Exception("The rental with userID {0} and movieID {0} does not exist!".format(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID]))
+        except Exception as ex:
+            traceback.print_exc()
+            self.__consoleHelper.printError(*ex.args)
 
     def opSearch(self):
         pass
@@ -147,7 +167,12 @@ class Console(object):
         """
         print(type, ":")
         for c in elements.values():
-            print(c.attrs)
+            for k, v in c.attrs.items():
+                if k in [Utils.RENTED_DATE, Utils.DUE_DATE, Utils.RETURNED_DATE]:
+                    if v is not None:
+                        v = Utils.dateFromTimestamp(v)
+                print(k, ":", v)
+            print("")
         print("")
 
     def printOptions(self):
@@ -181,5 +206,7 @@ class Console(object):
             self.__clientService.addClient({Utils.CLIENT_ID: i, Utils.CLIENT_NAME: "Name" + str(i)})
             self.__movieService.addMovie({Utils.MOVIE_ID: i, Utils.MOVIE_TITLE: "Title" + str(i), Utils.MOVIE_DESCRIPTION: "Desc" + str(i), Utils.MOVIE_GENRE: "Genre" + str(i)})
 
-        for i in range(0, 6):
-            self.__rentalService.addRental({Utils.RENTAL_ID: i, Utils.MOVIE_ID: randint(1, 10), Utils.CLIENT_ID: randint(1, 10), Utils.RENTED_DATE: Utils.dateFromStr(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2017))), Utils.DUE_DATE: datetime.now().timestamp(), Utils.RETURNED_DATE: None})
+        for i in range(1, 6):
+            rDate = Utils.timestampFromDate(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2016, 2017)))
+
+            self.__rentalService.addRental({Utils.RENTAL_ID: i, Utils.MOVIE_ID: randint(1, 10), Utils.CLIENT_ID: randint(1, 10), Utils.RENTED_DATE: rDate, Utils.DUE_DATE: rDate + Utils.CST_RENTAL_PERIOD, Utils.RETURNED_DATE: None})

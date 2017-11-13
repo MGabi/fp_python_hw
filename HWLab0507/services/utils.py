@@ -11,6 +11,7 @@ class Utils(object):
     """
     Some keywords used in the entire app
     """
+    CST_RENTAL_PERIOD = 1209600
     CLIENT_ID = "clientID"
     CLIENT_NAME = "clientNAME"
     MOVIE_ID = "movieID"
@@ -32,10 +33,20 @@ class Utils(object):
                 "returned_date": RETURNED_DATE}
 
     @staticmethod
-    def dateFromStr(date):
+    def timestampFromDate(date):
         """
         Converts date from DD/MM/YYY format to timestamp
         :param date: a date in string format as DD/MM/YYY
         :return: float value of the date timestamp
         """
         return datetime.strptime(date, "%d/%m/%Y").timestamp()
+
+    @staticmethod
+    def dateFromTimestamp(timestamp):
+        """
+        Converts timestamp (float) value to date
+        formatted as DD/MM/YYYY
+        :param timestamp: time in seconds as float
+        :return: new date from timestamp ( DD/MM/YYY )
+        """
+        return datetime.fromtimestamp(timestamp)

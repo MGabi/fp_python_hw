@@ -3,6 +3,9 @@
     @email:  ytgabi98@gmail.com
     @date:   11/12/2017 12:43
 """
+from services.utils import Utils
+
+
 class Movie(object):
     """
     This class holds data
@@ -48,4 +51,4 @@ class Movie(object):
 
     @property
     def attrs(self):
-        return [self.ID, self.movieTITLE, self.movieDESCRIPTION, self.movieGENRE]
+        return {Utils.MOVIE_ID: self.ID, Utils.MOVIE_TITLE: self.movieTITLE, Utils.MOVIE_DESCRIPTION: self.movieDESCRIPTION, Utils.MOVIE_GENRE: self.movieGENRE}

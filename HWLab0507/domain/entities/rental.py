@@ -3,6 +3,9 @@
     @email:  ytgabi98@gmail.com
     @date:   11/12/2017 12:50
 """
+from services.utils import Utils
+
+
 class Rental(object):
     """
     This class holds data
@@ -67,4 +70,4 @@ class Rental(object):
 
     @property
     def attrs(self):
-        return [self.ID, self.movieID, self.clientID, self.rentedDATE, self.dueDATE, self.returnedDATE]
+        return {Utils.RENTAL_ID: self.ID, Utils.MOVIE_ID: self.movieID, Utils.CLIENT_ID: self.clientID, Utils.RENTED_DATE: self.rentedDATE, Utils.DUE_DATE: self.dueDATE, Utils.RETURNED_DATE: self.returnedDATE}

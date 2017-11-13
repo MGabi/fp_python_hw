@@ -71,13 +71,19 @@ class ConsoleHelper(object):
         ValueError will be raised if the ID is not an int
         :return: rental attributes as a dictionary
         """
-        rID = input("Rental ID:")
-        rID = int(rID)
-        movieID = input("Movie ID:")
-        clientID = input("client ID:")
-        rentedDate = 0
-        dueDate = 0
-        returnedDate = None
+        print("Enter the ID for the new rental, the movie ID\nwhich will be rented and the ID for the\nclient that will make the rental.\n")
+        try:
+            rID = input("Rental ID:")
+            rID = int(rID)
+            movieID = input("Movie ID:")
+            movieID = int(movieID)
+            clientID = input("client ID:")
+            clientID = int(clientID)
+            rentedDate = datetime.now().timestamp()
+            dueDate = rentedDate + Utils.CST_RENTAL_PERIOD
+            returnedDate = None
+        except ValueError as ve:
+            raise Exception("ID should be an int!")
 
         return {Utils.RENTAL_ID: rID,
                 Utils.MOVIE_ID: movieID,
@@ -85,6 +91,23 @@ class ConsoleHelper(object):
                 Utils.RENTED_DATE: rentedDate,
                 Utils.DUE_DATE: dueDate,
                 Utils.RETURNED_DATE: returnedDate}
+
+    def getReturnData(self):
+        """
+        Reads the data for making a return
+        :return: the clientID for the client which will make the return
+        and the movieID for the movie that will be returned
+        """
+        print("Enter the clientID for making a return:")
+        try:
+            cID = input("Client ID:")
+            cID = int(cID)
+            mID = input("Movie ID:")
+            mID = int(mID)
+        except ValueError:
+            raise Exception("ID should be an int!")
+
+        return {Utils.CLIENT_ID: cID, Utils.MOVIE_ID: mID}
 
     @staticmethod
     def printError(args):

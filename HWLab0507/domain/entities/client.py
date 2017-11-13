@@ -3,6 +3,9 @@
     @email:  ytgabi98@gmail.com
     @date:   11/12/2017 12:48
 """
+from services.utils import Utils
+
+
 class Client(object):
     """
     This class holds data
@@ -30,4 +33,4 @@ class Client(object):
 
     @property
     def attrs(self):
-        return [self.__clientID, self.__clientNAME]
+        return {Utils.CLIENT_ID: self.__clientID, Utils.CLIENT_NAME: self.__clientNAME}
