@@ -55,7 +55,8 @@ class Console(object):
             if l == 3:
                 self.__rentalService.addRental(self.__consoleHelper.readRental())
         except Exception as ex:
-            self.__consoleHelper.printError(*ex.args)
+            #self.__consoleHelper.printError(*ex.args)
+            raise ex
 
     def opRemove(self):
         """
@@ -71,7 +72,8 @@ class Console(object):
             if l == 2:
                 self.__movieService.removeMovie(self.__consoleHelper.readID())
         except Exception as ex:
-            self.__consoleHelper.printError(*ex.args)
+            #self.__consoleHelper.printError(*ex.args)
+            raise ex
 
     def opUpdate(self):
         """
@@ -87,8 +89,8 @@ class Console(object):
             if l == 2:
                 self.__movieService.updateMovie(self.__consoleHelper.readID(), self.__consoleHelper.readMovie())
         except Exception as ex:
-            self.__consoleHelper.printError(*ex.args)
-
+            #self.__consoleHelper.printError(*ex.args)
+            raise ex
     def opList(self):
         """
         This method will print the selected list after getting
@@ -105,18 +107,33 @@ class Console(object):
             if l == 3:
                 self.printAllOf("Rentals", self.__rentalService.getAllRentals())
         except Exception as ex:
-            self.__consoleHelper.printError(*ex.args)
+            #self.__consoleHelper.printError(*ex.args)
+            raise ex
 
     def opRentMovie(self):
+        """
+        Handle the rent operation
+        Receive attributes for a new rental from console
+        Performs validations on movie and client side
+        Proceed to adding the rental if no exceptions were raised
+        :return: nothing
+        """
         try:
             rentalAttrs = self.__consoleHelper.readRental()
             ValidateUserRentalStatus.validate(rentalAttrs[Utils.CLIENT_ID], self.__rentalService.getAllRentals(), rentalAttrs[Utils.MOVIE_ID])
             ValidateMovieCanBeRented.validate(rentalAttrs[Utils.MOVIE_ID], self.__movieService.getAllMovies())
             self.__rentalService.addRental(rentalAttrs)
         except Exception as ex:
-            self.__consoleHelper.printError(*ex.args)
+            #self.__consoleHelper.printError(*ex.args)
+            raise ex
 
     def opReturnMovie(self):
+        """
+        Handle the return operation
+        Receives the return data from console and then
+        proceeds to finish the return of the movie
+        :return: nothing
+        """
         try:
             returnAttrs = self.__consoleHelper.getReturnData()
             rental = self.__rentalService.getRentalWithIDs(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID])
@@ -127,11 +144,35 @@ class Console(object):
             else:
                 raise Exception("The rental with userID {0} and movieID {0} does not exist!".format(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID]))
         except Exception as ex:
-            traceback.print_exc()
-            self.__consoleHelper.printError(*ex.args)
+            #traceback.print_exc()
+            #self.__consoleHelper.printError(*ex.args)
+            raise ex
 
     def opSearch(self):
-        pass
+        """
+        Handle the search operation
+        Receives the list ID from console and then proceed to quering
+        After getting the queried list, will proceed to printing
+        :return: nothing
+        """
+        self.printChooseList()
+        try:
+            opList = self.__consoleHelper.readCommand(3, 1)
+            query = self.__consoleHelper.readQuery()
+            finalList = []
+            if opList == 1:
+                #finalList = self.__clientService.queryClients(query)
+                finalList = Utils.queryList(self.__clientService.getAllClients(), query)
+            if opList == 2:
+                #finalList = self.__movieService.queryMovies(query)
+                finalList = Utils.queryList(self.__movieService.getAllMovies(), query)
+            if opList == 3:
+                #finalList = self.__rentalService.queryRentals(query)
+                finalList = Utils.queryList(self.__rentalService.getAllRentals(), query)
+            self.printAllOf("Elements found: ", finalList)
+        except Exception as ex:
+            # self.__consoleHelper.printError(*ex.args)
+            raise ex
 
     def opStatistics(self):
         pass
@@ -156,13 +197,13 @@ class Console(object):
                 self.__cmdsDict[option]()
             except Exception as ex:
                 consoleHelper.printError(*ex.args)
-                #traceback.print_exc()
+                traceback.print_exc()
 
     def printAllOf(self, type, elements):
         """
         Print a list of clients/movies/rentals
         :param type: the header of the printing: e.g. Clients / Movies / Rentals
-        :param elements: the list that will be printed
+        :param elements: the dictonary that will be printed
         :return: nothing
         """
         print(type, ":")

@@ -117,3 +117,12 @@ class ConsoleHelper(object):
         :return: nothing
         """
         print("\n\033[31m   ", args, "\033[0m\n")
+
+    @staticmethod
+    def readQuery():
+        """
+        Reads the query string for searching in a list
+        :return: the input from the console as a string
+        """
+        s = input("Type the keyword for querying the list: ")
+        return s

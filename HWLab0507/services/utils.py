@@ -50,3 +50,31 @@ class Utils(object):
         :return: new date from timestamp ( DD/MM/YYY )
         """
         return datetime.fromtimestamp(timestamp)
+
+    @staticmethod
+    def queryList(wantedList, query):
+        """
+        Queries the list for finding occurences of `query` in it's elements
+        :param query: string for querying
+        :return: a dictionary contaning elements with `query` in them
+        """
+        newList = {}
+        query = query.lower()
+        ctr = 1
+        for el in wantedList.values():
+            for k, v in el.attrs.items():
+                if v is None:
+                    break
+
+                if isinstance(v, int):
+                    v = str(v)
+
+                if isinstance(v, float):
+                    v = str(Utils.dateFromTimestamp(v))
+
+                if query in v.lower():
+                    newList[ctr] = el
+                    ctr += 1
+                    break
+
+        return newList
