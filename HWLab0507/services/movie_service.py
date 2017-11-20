@@ -49,3 +49,11 @@ class MovieService(object):
         :return: all movies as a list
         """
         return self.__movieManager.getEntities()
+
+    def getMovie(self, id):
+        """
+        Returns a movie with given ID
+        :param id: id for the movie
+        :return: a movie with this ID
+        """
+        return self.__movieManager.getEntityById(id)

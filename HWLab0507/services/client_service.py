@@ -50,3 +50,11 @@ class ClientService(object):
         :return: all clients as a list
         """
         return self.__clientManager.getEntities()
+
+    def getClient(self, id):
+        """
+        Returns a client with given ID
+        :param id: id for the client
+        :return: a client with this ID
+        """
+        return self.__clientManager.getEntityById(id)

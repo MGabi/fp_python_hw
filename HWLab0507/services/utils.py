@@ -78,3 +78,13 @@ class Utils(object):
                     break
 
         return newList
+
+    @staticmethod
+    def rentalDelay(rental):
+        """
+        Calculates the delay of a rental in seconds
+        from the current time
+        :param rental: rental object
+        :return: the difference of currentTime - dueDate in seconds
+        """
+        return datetime.now().timestamp() - rental.dueDATE

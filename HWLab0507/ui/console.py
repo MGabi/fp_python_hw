@@ -161,21 +161,40 @@ class Console(object):
             query = self.__consoleHelper.readQuery()
             finalList = []
             if opList == 1:
-                #finalList = self.__clientService.queryClients(query)
                 finalList = Utils.queryList(self.__clientService.getAllClients(), query)
-            if opList == 2:
-                #finalList = self.__movieService.queryMovies(query)
+            elif opList == 2:
                 finalList = Utils.queryList(self.__movieService.getAllMovies(), query)
-            if opList == 3:
-                #finalList = self.__rentalService.queryRentals(query)
+            elif opList == 3:
                 finalList = Utils.queryList(self.__rentalService.getAllRentals(), query)
             self.printAllOf("Elements found: ", finalList)
+            del finalList
         except Exception as ex:
             # self.__consoleHelper.printError(*ex.args)
             raise ex
 
     def opStatistics(self):
-        pass
+        self.printStatistics()
+        try:
+            cmd = self.__consoleHelper.readCommand(5, 1)
+            l = {}
+            if cmd == 1:
+                l = self.__rentalService.getMostRentedMovies()
+                self.printMostRented(l)
+            elif cmd == 2:
+                l = self.__rentalService.getMostActiveClients()
+                self.printMostActiveClients(l)
+            elif cmd == 3:
+                self.printAllOf("Rentals", self.__rentalService.getAllRentals())
+            elif cmd == 4:
+                l = self.__rentalService.getAllRentedMovies()
+                self.printAllCurrentRented(l)
+            elif cmd == 5:
+                l = self.__rentalService.getLateRentals()
+                self.printLateRentals(l)
+            del l
+
+        except Exception as ex:
+            raise ex
 
     def opUndo(self):
         pass
@@ -216,6 +235,30 @@ class Console(object):
             print("")
         print("")
 
+    def printMostRented(self, l):
+        print("\n\033[92mThe most rented movies are: \033[0m")
+        for el in l:
+            print("     Movie\033[91m", self.__movieService.getMovie(el[0]).movieTITLE, "\033[0mwith\033[91m", el[1], "\033[0mrentings.")
+        print("")
+
+    def printMostActiveClients(self, l):
+        print("\n\033[92mThe most active clients are: \033[0m")
+        for el in l:
+            print("     Client\033[91m", self.__clientService.getClient(el[0]).clientNAME, "\033[0mwith\033[91m", el[1], "\033[0mdays on rents.")
+        print("")
+
+    def printAllCurrentRented(self, l):
+        print("\n\033[92mThe current rented movies are: \033[0m")
+        for el in l:
+            print("     Movie\033[91m", self.__movieService.getMovie(el).movieTITLE, "\033[0m")
+        print("")
+
+    def printLateRentals(self, l):
+        print("\n\033[92mThe current late rentals are: \033[0m")
+        for el in l:
+            print("     Rental\033[91m", el[0], "\033[0mwith\033[91m", el[1], "\033[0m days of delay for returning.")
+        print("")
+
     def printOptions(self):
         print("Choose one of the following options:")
         print("     \033[93m1\033[0m - \033[96mAdd\033[0m")
@@ -242,12 +285,27 @@ class Console(object):
         print("     \033[93m2\033[0m - \033[96mMovies\033[0m")
         #print("     \033[93m3\033[0m - \033[96mRentals\033[0m")
 
+    def printStatistics(self):
+        print("     \033[93m1\033[0m - \033[96mMost rented movies\033[0m")
+        print("     \033[93m2\033[0m - \033[96mMost active clients\033[0m")
+        print("     \033[93m3\033[0m - \033[96mAll rentals\033[0m")
+        print("     \033[93m4\033[0m - \033[96mAll movies currently rented\033[0m")
+        print("     \033[93m5\033[0m - \033[96mLate rentals\033[0m")
+
     def addClientsMoviesRentals(self):
         for i in range(1, 10):
-            self.__clientService.addClient({Utils.CLIENT_ID: i, Utils.CLIENT_NAME: "Name" + str(i)})
-            self.__movieService.addMovie({Utils.MOVIE_ID: i, Utils.MOVIE_TITLE: "Title" + str(i), Utils.MOVIE_DESCRIPTION: "Desc" + str(i), Utils.MOVIE_GENRE: "Genre" + str(i)})
+            self.__clientService.addClient({Utils.CLIENT_ID: i,
+                                            Utils.CLIENT_NAME: "Name" + str(i)})
+            self.__movieService.addMovie({Utils.MOVIE_ID: i,
+                                          Utils.MOVIE_TITLE: "Title" + str(i),
+                                          Utils.MOVIE_DESCRIPTION: "Desc" + str(i),
+                                          Utils.MOVIE_GENRE: "Genre" + str(i)})
 
-        for i in range(1, 6):
-            rDate = Utils.timestampFromDate(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2016, 2017)))
-
-            self.__rentalService.addRental({Utils.RENTAL_ID: i, Utils.MOVIE_ID: randint(1, 10), Utils.CLIENT_ID: randint(1, 10), Utils.RENTED_DATE: rDate, Utils.DUE_DATE: rDate + Utils.CST_RENTAL_PERIOD, Utils.RETURNED_DATE: None})
+        for i in range(1, 15):
+            rDate = Utils.timestampFromDate(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2019)))
+            self.__rentalService.addRental({Utils.RENTAL_ID: i,
+                                            Utils.MOVIE_ID: randint(1, 9),
+                                            Utils.CLIENT_ID: randint(1, 9),
+                                            Utils.RENTED_DATE: rDate,
+                                            Utils.DUE_DATE: rDate + Utils.CST_RENTAL_PERIOD,
+                                            Utils.RETURNED_DATE: None})
