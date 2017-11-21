@@ -296,6 +296,7 @@ class Console(object):
         for i in range(1, 10):
             self.__clientService.addClient({Utils.CLIENT_ID: i,
                                             Utils.CLIENT_NAME: "Name" + str(i)})
+
             self.__movieService.addMovie({Utils.MOVIE_ID: i,
                                           Utils.MOVIE_TITLE: "Title" + str(i),
                                           Utils.MOVIE_DESCRIPTION: "Desc" + str(i),

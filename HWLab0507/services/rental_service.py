@@ -39,6 +39,9 @@ class RentalService(object):
                 return rental
         return None
 
+    def getRental(self, id):
+        return self.__rentalManager.getEntityById(id)
+
     def getAllRentals(self):
         """
         Returns all existing rentals
@@ -88,7 +91,7 @@ class RentalService(object):
         """
         movs = []
         for rental in self.getAllRentals().values():
-            if rental.movieID not in movs:
+            if rental.movieID not in movs and rental.returnedDATE is None:
                 movs.append(rental.movieID)
 
         return sorted(movs, reverse  = True)

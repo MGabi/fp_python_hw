@@ -54,7 +54,7 @@ class Utils(object):
     @staticmethod
     def queryList(wantedList, query):
         """
-        Queries the list for finding occurences of `query` in it's elements
+        Queries the dictionary for finding occurences of `query` in it's elements
         :param query: string for querying
         :return: a dictionary contaning elements with `query` in them
         """
@@ -76,6 +76,8 @@ class Utils(object):
                     newList[ctr] = el
                     ctr += 1
                     break
+        if len(newList) == 0:
+            raise Exception("No such elements in the list!")
 
         return newList
 
