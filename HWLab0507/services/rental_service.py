@@ -14,20 +14,25 @@ class RentalService(object):
     def __init__(self, manager):
         self.__rentalManager = manager
 
-    def addRental(self, attrs):
+    def addRental(self, rental):
         """
         Create a new rental with given attributes
         and save it to the storage
         :param attrs: attributes of the rental
         :return: nothing
         """
-        rental = Rental(attrs[Utils.RENTAL_ID],
-                        attrs[Utils.MOVIE_ID],
-                        attrs[Utils.CLIENT_ID],
-                        attrs[Utils.RENTED_DATE],
-                        attrs[Utils.DUE_DATE],
-                        attrs[Utils.RETURNED_DATE])
+        # rental = Rental(attrs[Utils.RENTAL_ID],
+        #                 attrs[Utils.MOVIE_ID],
+        #                 attrs[Utils.CLIENT_ID],
+        #                 attrs[Utils.RENTED_DATE],
+        #                 attrs[Utils.DUE_DATE],
+        #                 attrs[Utils.RETURNED_DATE])
         self.__rentalManager.saveEntity(rental)
+
+    def updateRental(self, rental):
+        if isinstance(rental, tuple):
+            rental = rental[0]
+        self.__rentalManager.updateEntity(rental.ID, rental)
 
     def finishRental(self, rental):
         rental.returnedDATE = datetime.now().timestamp()
@@ -111,3 +116,8 @@ class RentalService(object):
                 rentals[rental.ID] = int(delay/60/60/24)
 
         return sorted(rentals.items(), key = operator.itemgetter(1), reverse = True)
+
+    def removeRental(self, id):
+        if isinstance(id, tuple):
+            id = id[0]
+        self.__rentalManager.deleteEntityById(id)

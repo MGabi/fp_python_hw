@@ -13,17 +13,19 @@ class ClientService(object):
     def __init__(self, manager):
         self.__clientManager = manager
 
-    def addClient(self, attrs):
+    def addClient(self, client):
         """
         Create a new client with given attributes
         and save it to the storage
         :param attrs: attributes of the client
         :return: nothing
         """
-        client = Client(attrs[Utils.CLIENT_ID], attrs[Utils.CLIENT_NAME])
+        # client = Client(attrs[Utils.CLIENT_ID], attrs[Utils.CLIENT_NAME])
+        if isinstance(client, tuple):
+            client = client[0]
         self.__clientManager.saveEntity(client)
 
-    def updateClient(self, cID, attrs):
+    def updateClient(self, client):
         """
         Updates a certain client having cID
         Attrs can contain a new ID for the client
@@ -33,8 +35,9 @@ class ClientService(object):
         :param attrs: new attributes of the client
         :return: nothing
         """
-        client = Client(cID, attrs[Utils.CLIENT_NAME])
-        self.__clientManager.updateEntity(cID, client)
+        if isinstance(client, tuple):
+            client = client[0]
+        self.__clientManager.updateEntity(client.ID, client)
 
     def removeClient(self, id):
         """
@@ -42,6 +45,8 @@ class ClientService(object):
         :param id: the ID for the client which will be deleted
         :return: nothing
         """
+        if isinstance(id, tuple):
+            id = id[0]
         self.__clientManager.deleteEntityById(id)
 
     def getAllClients(self):

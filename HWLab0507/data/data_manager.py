@@ -4,6 +4,7 @@
     @date:   11/12/2017 13:00
 """
 import traceback
+
 class DataManagerException(Exception):
     pass
 

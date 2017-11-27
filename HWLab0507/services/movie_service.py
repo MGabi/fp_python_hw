@@ -12,17 +12,18 @@ class MovieService(object):
     def __init__(self, manager):
         self.__movieManager = manager
 
-    def addMovie(self, attrs):
+    def addMovie(self, movie):
         """
         Create a new movie with given attributes
         and save it to the storage
         :param attrs: attributes of the movie
         :return: nothing
         """
-        movie = Movie(attrs[Utils.MOVIE_ID], attrs[Utils.MOVIE_TITLE], attrs[Utils.MOVIE_DESCRIPTION], attrs[Utils.MOVIE_GENRE])
+        if isinstance(movie, tuple):
+            movie = movie[0]
         self.__movieManager.saveEntity(movie)
 
-    def updateMovie(self, mID, attrs):
+    def updateMovie(self, movie):
         """
         Updates a certain movie having mID
         Attrs can contain a new ID for the movie
@@ -32,8 +33,9 @@ class MovieService(object):
         :param attrs: new attributes of the movie
         :return: nothing
         """
-        movie = Movie(mID, attrs[Utils.MOVIE_TITLE], attrs[Utils.MOVIE_DESCRIPTION], attrs[Utils.MOVIE_GENRE])
-        self.__movieManager.updateEntity(mID, movie)
+        if isinstance(movie, tuple):
+            movie = movie[0]
+        self.__movieManager.updateEntity(movie.ID, movie)
 
     def removeMovie(self, id):
         """
@@ -41,6 +43,8 @@ class MovieService(object):
         :param id: the ID for the movie which will be deleted
         :return: nothing
         """
+        if isinstance(id, tuple):
+            id = id[0]
         self.__movieManager.deleteEntityById(id)
 
     def getAllMovies(self):

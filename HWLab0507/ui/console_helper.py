@@ -3,6 +3,9 @@
     @email:  ytgabi98@gmail.com
     @date:   11/12/2017 15:36
 """
+from domain.entities.client import Client
+from domain.entities.movie import Movie
+from domain.entities.rental import Rental
 from domain.validators.option_validator import OptionValidator
 from services.utils import *
 
@@ -44,7 +47,8 @@ class ConsoleHelper(object):
         cID = input("Client ID:")
         cID = int(cID)
         name = input("Client name:")
-        return {Utils.CLIENT_ID: cID, Utils.CLIENT_NAME: name}
+        return Client(cID, name)
+        #return {Utils.CLIENT_ID: cID, Utils.CLIENT_NAME: name}
 
     @staticmethod
     def readMovie():
@@ -59,10 +63,11 @@ class ConsoleHelper(object):
         title = input("Movie title:")
         desc = input("Movie description:")
         genre = input("Movie genre:")
-        return {Utils.MOVIE_ID: mID,
-                Utils.MOVIE_TITLE: title,
-                Utils.MOVIE_DESCRIPTION: desc,
-                Utils.MOVIE_GENRE: genre}
+        return Movie(mID, title, desc, genre)
+        # return {Utils.MOVIE_ID: mID,
+        #         Utils.MOVIE_TITLE: title,
+        #         Utils.MOVIE_DESCRIPTION: desc,
+        #         Utils.MOVIE_GENRE: genre}
 
     @staticmethod
     def readRental():
@@ -85,12 +90,13 @@ class ConsoleHelper(object):
         except ValueError as ve:
             raise Exception("ID should be an int!")
 
-        return {Utils.RENTAL_ID: rID,
-                Utils.MOVIE_ID: movieID,
-                Utils.CLIENT_ID: clientID,
-                Utils.RENTED_DATE: rentedDate,
-                Utils.DUE_DATE: dueDate,
-                Utils.RETURNED_DATE: returnedDate}
+        # return {Utils.RENTAL_ID: rID,
+        #         Utils.MOVIE_ID: movieID,
+        #         Utils.CLIENT_ID: clientID,
+        #         Utils.RENTED_DATE: rentedDate,
+        #         Utils.DUE_DATE: dueDate,
+        #         Utils.RETURNED_DATE: returnedDate}
+        return Rental(rID, movieID, clientID, rentedDate, dueDate, returnedDate)
 
     def getReturnData(self):
         """
@@ -126,3 +132,41 @@ class ConsoleHelper(object):
         """
         s = input("Type the keyword for querying the list: ")
         return s
+
+    @staticmethod
+    def printStatistics():
+        print("     \033[93m1\033[0m - \033[96mMost rented movies\033[0m")
+        print("     \033[93m2\033[0m - \033[96mMost active clients\033[0m")
+        print("     \033[93m3\033[0m - \033[96mAll rentals\033[0m")
+        print("     \033[93m4\033[0m - \033[96mAll movies currently rented\033[0m")
+        print("     \033[93m5\033[0m - \033[96mLate rentals\033[0m")
+
+    @staticmethod
+    def printOptions():
+        print("Choose one of the following options:")
+        print("     \033[93m1\033[0m - \033[96mAdd\033[0m")
+        print("     \033[93m2\033[0m - \033[96mRemove\033[0m")
+        print("     \033[93m3\033[0m - \033[96mUpdate\033[0m")
+        print("     \033[93m4\033[0m - \033[96mList\033[0m")
+        print("     \033[93m5\033[0m - \033[96mRent a movie\033[0m")
+        print("     \033[93m6\033[0m - \033[96mReturn a movie\033[0m")
+        print("     \033[93m7\033[0m - \033[96mSearch users or movies\033[0m")
+        print("     \033[93m8\033[0m - \033[96mCreate statistics\033[0m")
+        print("     \033[93m9\033[0m - \033[96mUndo the last operation\033[0m")
+        print("    \033[93m10\033[0m - \033[96mRedo the last operation\033[0m")
+        print("     \033[93m0\033[0m - \033[96mExit the program\033[0m")
+
+    @staticmethod
+    def printHeader():
+        print("\033[91m##############################\033[0m")
+        print("\033[91m######MOVIE RENTAL STORE######\033[0m")
+        print("\033[91m##############################\033[0m")
+        print("")
+        print("Managing the list of clients and available movies")
+
+    @staticmethod
+    def printChooseList():
+        print("Select a list:")
+        print("     \033[93m1\033[0m - \033[96mClients\033[0m")
+        print("     \033[93m2\033[0m - \033[96mMovies\033[0m")
+        #print("     \033[93m3\033[0m - \033[96mRentals\033[0m")

@@ -48,12 +48,13 @@ class TestClientService(TestCase):
         self.clientService = ClientService(self.dataManager)
 
         for i in range(1, 10):
-            self.clientService.addClient({Utils.CLIENT_ID: i,
-                                            Utils.CLIENT_NAME: "Name" + str(i)})
-
+            # self.clientService.addClient({Utils.CLIENT_ID: i,
+            #                                 Utils.CLIENT_NAME: "Name" + str(i)})
+            self.clientService.addClient(Client(i, "Name" + str(i)))
     def test_addClient(self):
         try:
-            self.clientService.addClient({Utils.CLIENT_ID: 1, Utils.CLIENT_NAME: "Jhon"})
+            # self.clientService.addClient({Utils.CLIENT_ID: 1, Utils.CLIENT_NAME: "Jhon"})
+            self.clientService.addClient(Client(1, "Jhon"))
             assert False
         except Exception as ex:
             pass
@@ -62,7 +63,8 @@ class TestClientService(TestCase):
         self.assertEqual(c.attrs, {Utils.CLIENT_ID: 2, Utils.CLIENT_NAME: "Name2"}, "Error add client")
 
     def test_updateClient(self):
-        self.clientService.updateClient(1, {Utils.CLIENT_NAME: "Jhon"})
+        # self.clientService.updateClient(1, {Utils.CLIENT_NAME: "Jhon"})
+        self.clientService.updateClient(Client(1, "Jhon"))
         c = self.clientService.getClient(1)
         self.assertEqual(c.attrs, {Utils.CLIENT_ID: 1, Utils.CLIENT_NAME: "Jhon"})
 
@@ -100,17 +102,15 @@ class TestMovieService(TestCase):
         self.movieService = MovieService(self.dataManager)
 
         for i in range(1, 10):
-            self.movieService.addMovie({Utils.MOVIE_ID: i,
-                                          Utils.MOVIE_TITLE: "Title" + str(i),
-                                          Utils.MOVIE_DESCRIPTION: "Desc" + str(i),
-                                          Utils.MOVIE_GENRE: "Genre" + str(i)})
+            # self.movieService.addMovie({Utils.MOVIE_ID: i,
+            #                               Utils.MOVIE_TITLE: "Title" + str(i),
+            #                               Utils.MOVIE_DESCRIPTION: "Desc" + str(i),
+            #                               Utils.MOVIE_GENRE: "Genre" + str(i)})
+            self.movieService.addMovie(Movie(i, "Title" + str(i), "Desc" + str(i), "Genre" + str(i)))
 
     def test_addMovie(self):
         try:
-            self.movieService.addMovie({Utils.MOVIE_ID: 1,
-                                        Utils.MOVIE_TITLE: "Title",
-                                        Utils.MOVIE_DESCRIPTION: "Desc",
-                                        Utils.MOVIE_GENRE: "Genre"})
+            self.movieService.addMovie(Movie(1, "Title", "Desc", "Genre"))
             assert False
         except Exception as ex:
             pass
@@ -122,9 +122,10 @@ class TestMovieService(TestCase):
                                     Utils.MOVIE_GENRE: "Genre2"}, "Error add movie")
 
     def test_updateMovie(self):
-        self.movieService.updateMovie(1, {Utils.MOVIE_TITLE: "TitleX",
-                                        Utils.MOVIE_DESCRIPTION: "DescX",
-                                        Utils.MOVIE_GENRE: "GenreX"})
+        # self.movieService.updateMovie(1, {Utils.MOVIE_TITLE: "TitleX",
+        #                                 Utils.MOVIE_DESCRIPTION: "DescX",
+        #                                 Utils.MOVIE_GENRE: "GenreX"})
+        self.movieService.updateMovie(Movie(1, "TitleX", "DescX", "GenreX"))
         c = self.movieService.getMovie(1)
         self.assertEqual(c.attrs, {Utils.MOVIE_ID: 1,
                                     Utils.MOVIE_TITLE: "TitleX",

@@ -6,16 +6,21 @@
 import traceback
 from random import randint
 
+from copy import copy
+
+from domain.entities.client import Client
+from domain.entities.movie import Movie
 from domain.entities.rental import Rental
 from domain.validators.other_validations import *
 from services.utils import *
 from ui.console_helper import ConsoleHelper
 
+
 class Console(object):
     """
     The main class which communicate with the user
     """
-    def __init__(self, clientService, movieService, rentalService):
+    def __init__(self, clientService, movieService, rentalService, undoRedoHandler):
         self.__clientService = clientService
         self.__movieService = movieService
         self.__rentalService = rentalService
@@ -28,8 +33,14 @@ class Console(object):
                            6: self.opReturnMovie,
                            7: self.opSearch,
                            8: self.opStatistics,
-                           9: self.opUndo}
+                           9: self.opUndo,
+                           10: self.opRedo}
         self.__consoleHelper = ConsoleHelper()
+        self.__undoHandler = undoRedoHandler
+
+    @staticmethod
+    def opSuccess():
+        print("success")
 
     def opExit(self):
         """
@@ -45,15 +56,21 @@ class Console(object):
         to the list after getting the object data from console
         :return: nothing
         """
-        self.printChooseList()
+        self.__consoleHelper.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(3, 1)
             if l == 1:
-                self.__clientService.addClient(self.__consoleHelper.readClient())
+                client = self.__consoleHelper.readClient()
+                self.__clientService.addClient(client)
+                self.__undoHandler.registerOperation(self.__clientService, self.__clientService.addClient, self.__clientService.removeClient, client.ID)
             if l == 2:
-                self.__movieService.addMovie(self.__consoleHelper.readMovie())
+                movie = self.__consoleHelper.readMovie()
+                self.__movieService.addMovie(movie)
+                self.__undoHandler.registerOperation(self.__movieService, self.__movieService.addMovie, self.__movieService.removeMovie, movie.ID)
             if l == 3:
-                self.__rentalService.addRental(self.__consoleHelper.readRental())
+                rental = self.__consoleHelper.readRental()
+                self.__rentalService.addRental(rental)
+                self.__undoHandler.registerOperation(self.__rentalService, self.__rentalService.addRental, self.__rentalService.removeRental, rental.ID)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
@@ -64,13 +81,19 @@ class Console(object):
         a certain entity with a given ID from the console
         :return: nothing
         """
-        self.printChooseList()
+        self.__consoleHelper.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(2, 1)
             if l == 1:
-                self.__clientService.removeClient(self.__consoleHelper.readID())
+                id = self.__consoleHelper.readID()
+                client = self.__clientService.getClient(id)
+                self.__clientService.removeClient(id)
+                self.__undoHandler.registerOperation(self.__clientService, self.__clientService.removeClient, self.__clientService.addClient, client)
             if l == 2:
-                self.__movieService.removeMovie(self.__consoleHelper.readID())
+                id = self.__consoleHelper.readID()
+                movie = self.__movieService.getMovie(id)
+                self.__movieService.removeMovie(id)
+                self.__undoHandler.registerOperation(self.__movieService, self.__movieService.removeMovie, self.__movieService.addMovie, movie)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
@@ -81,23 +104,30 @@ class Console(object):
         given position for a client/movie after receiving data from console
         :return: nothing
         """
-        self.printChooseList()
+        self.__consoleHelper.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(2, 1)
             if l == 1:
-                self.__clientService.updateClient(self.__consoleHelper.readID(), self.__consoleHelper.readClient())
+                client = self.__consoleHelper.readClient()
+                clientCopy = self.__clientService.getClient(client.ID)
+                self.__clientService.updateClient(client)
+                self.__undoHandler.registerOperation(self.__clientService, self.__clientService.updateClient, self.__clientService.updateClient, clientCopy)
             if l == 2:
-                self.__movieService.updateMovie(self.__consoleHelper.readID(), self.__consoleHelper.readMovie())
+                movie = self.__consoleHelper.readMovie()
+                movieCopy = self.__movieService.getMovie(movie.ID)
+                self.__movieService.updateMovie(movie)
+                self.__undoHandler.registerOperation(self.__movieService, self.__movieService.updateMovie, self.__movieService.updateMovie, movieCopy)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
+
     def opList(self):
         """
         This method will print the selected list after getting
         the ID from the console
         :return:
         """
-        self.printChooseList()
+        self.__consoleHelper.printChooseList()
         try:
             l = self.__consoleHelper.readCommand(3, 1)
             if l == 1:
@@ -119,10 +149,11 @@ class Console(object):
         :return: nothing
         """
         try:
-            rentalAttrs = self.__consoleHelper.readRental()
-            ValidateUserRentalStatus.validate(rentalAttrs[Utils.CLIENT_ID], self.__rentalService.getAllRentals(), rentalAttrs[Utils.MOVIE_ID])
-            ValidateMovieCanBeRented.validate(rentalAttrs[Utils.MOVIE_ID], self.__movieService.getAllMovies())
-            self.__rentalService.addRental(rentalAttrs)
+            rental = self.__consoleHelper.readRental()
+            ValidateUserRentalStatus.validate(rental.clientID, self.__rentalService.getAllRentals(), rental.movieID)
+            ValidateMovieCanBeRented.validate(rental.movieID, self.__movieService.getAllMovies())
+            self.__rentalService.addRental(rental)
+            self.__undoHandler.registerOperation(self.__rentalService, self.__rentalService.addRental, self.__rentalService.removeRental, rental.ID)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
@@ -141,8 +172,12 @@ class Console(object):
                 if rental.returnedDATE is not None:
                     raise Exception("The rental with id {0} was already finished!".format(rental.ID))
                 self.__rentalService.finishRental(rental)
+                rentalCpy = copy(rental)
+                rentalCpy.returnedDATE = None
+                self.__undoHandler.registerOperation(self.__rentalService, self.__rentalService.finishRental, self.__rentalService.updateRental, rentalCpy)
             else:
                 raise Exception("The rental with userID {0} and movieID {0} does not exist!".format(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID]))
+
         except Exception as ex:
             #traceback.print_exc()
             #self.__consoleHelper.printError(*ex.args)
@@ -155,7 +190,7 @@ class Console(object):
         After getting the queried list, will proceed to printing
         :return: nothing
         """
-        self.printChooseList()
+        self.__consoleHelper.printChooseList()
         try:
             opList = self.__consoleHelper.readCommand(3, 1)
             query = self.__consoleHelper.readQuery()
@@ -173,7 +208,7 @@ class Console(object):
             raise ex
 
     def opStatistics(self):
-        self.printStatistics()
+        self.__consoleHelper.printStatistics()
         try:
             cmd = self.__consoleHelper.readCommand(5, 1)
             l = {}
@@ -197,7 +232,10 @@ class Console(object):
             raise ex
 
     def opUndo(self):
-        pass
+        self.__undoHandler.undo()
+
+    def opRedo(self):
+        self.__undoHandler.redo()
 
     def startConsole(self):
         """
@@ -207,14 +245,15 @@ class Console(object):
         :return:
         """
         self.addClientsMoviesRentals()
-        self.printHeader()
+        self.__consoleHelper.printHeader()
         consoleHelper = self.__consoleHelper
         while True:
             try:
-                self.printOptions()
-                option = consoleHelper.readCommand(9)
+                self.__consoleHelper.printOptions()
+                option = consoleHelper.readCommand(10)
                 self.__cmdsDict[option]()
             except Exception as ex:
+                print("\nUP UP UP\n")
                 consoleHelper.printError(*ex.args)
                 traceback.print_exc()
 
@@ -259,54 +298,24 @@ class Console(object):
             print("     Rental\033[91m", el[0], "\033[0mwith\033[91m", el[1], "\033[0m days of delay for returning.")
         print("")
 
-    def printOptions(self):
-        print("Choose one of the following options:")
-        print("     \033[93m1\033[0m - \033[96mAdd\033[0m")
-        print("     \033[93m2\033[0m - \033[96mRemove\033[0m")
-        print("     \033[93m3\033[0m - \033[96mUpdate\033[0m")
-        print("     \033[93m4\033[0m - \033[96mList\033[0m")
-        print("     \033[93m5\033[0m - \033[96mRent a movie\033[0m")
-        print("     \033[93m6\033[0m - \033[96mReturn a movie\033[0m")
-        print("     \033[93m7\033[0m - \033[96mSearch users or movies\033[0m")
-        print("     \033[93m8\033[0m - \033[96mCreate statistics\033[0m")
-        print("     \033[93m9\033[0m - \033[96mUndo the last operation\033[0m")
-        print("     \033[93m0\033[0m - \033[96mExit the program\033[0m")
-
-    def printHeader(self):
-        print("\033[91m##############################\033[0m")
-        print("\033[91m######MOVIE RENTAL STORE######\033[0m")
-        print("\033[91m##############################\033[0m")
-        print("")
-        print("Managing the list of clients and available movies")
-
-    def printChooseList(self):
-        print("Select a list:")
-        print("     \033[93m1\033[0m - \033[96mClients\033[0m")
-        print("     \033[93m2\033[0m - \033[96mMovies\033[0m")
-        #print("     \033[93m3\033[0m - \033[96mRentals\033[0m")
-
-    def printStatistics(self):
-        print("     \033[93m1\033[0m - \033[96mMost rented movies\033[0m")
-        print("     \033[93m2\033[0m - \033[96mMost active clients\033[0m")
-        print("     \033[93m3\033[0m - \033[96mAll rentals\033[0m")
-        print("     \033[93m4\033[0m - \033[96mAll movies currently rented\033[0m")
-        print("     \033[93m5\033[0m - \033[96mLate rentals\033[0m")
 
     def addClientsMoviesRentals(self):
         for i in range(1, 10):
-            self.__clientService.addClient({Utils.CLIENT_ID: i,
-                                            Utils.CLIENT_NAME: "Name" + str(i)})
-
-            self.__movieService.addMovie({Utils.MOVIE_ID: i,
-                                          Utils.MOVIE_TITLE: "Title" + str(i),
-                                          Utils.MOVIE_DESCRIPTION: "Desc" + str(i),
-                                          Utils.MOVIE_GENRE: "Genre" + str(i)})
+            # self.__clientService.addClient({Utils.CLIENT_ID: i,
+            #                                 Utils.CLIENT_NAME: "Name" + str(i)})
+            self.__clientService.addClient(Client(i, "Name" + str(i)))
+            # self.__movieService.addMovie({Utils.MOVIE_ID: i,
+            #                               Utils.MOVIE_TITLE: "Title" + str(i),
+            #                               Utils.MOVIE_DESCRIPTION: "Desc" + str(i),
+            #                               Utils.MOVIE_GENRE: "Genre" + str(i)})
+            self.__movieService.addMovie(Movie(i, "Title" + str(i), "Desc" + str(i), "Genre" + str(i)))
 
         for i in range(1, 15):
             rDate = Utils.timestampFromDate(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2019)))
-            self.__rentalService.addRental({Utils.RENTAL_ID: i,
-                                            Utils.MOVIE_ID: randint(1, 9),
-                                            Utils.CLIENT_ID: randint(1, 9),
-                                            Utils.RENTED_DATE: rDate,
-                                            Utils.DUE_DATE: rDate + Utils.CST_RENTAL_PERIOD,
-                                            Utils.RETURNED_DATE: None})
+            # self.__rentalService.addRental({Utils.RENTAL_ID: i,
+            #                                 Utils.MOVIE_ID: randint(1, 9),
+            #                                 Utils.CLIENT_ID: randint(1, 9),
+            #                                 Utils.RENTED_DATE: rDate,
+            #                                 Utils.DUE_DATE: rDate + Utils.CST_RENTAL_PERIOD,
+            #                                 Utils.RETURNED_DATE: None})
+            self.__rentalService.addRental(Rental(i, randint(1, 9), randint(1, 9), rDate, rDate + Utils.CST_RENTAL_PERIOD, None))

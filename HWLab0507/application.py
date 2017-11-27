@@ -12,6 +12,7 @@ from domain.validators.rental_validator import RentalValidator
 from services.client_service import ClientService
 from services.movie_service import MovieService
 from services.rental_service import RentalService
+from services.undo_redo_handler import UndoHandler
 from ui.console import Console
 
 
@@ -21,6 +22,8 @@ def run_application():
     :return: nothing
     """
     try:
+        undoRedoHandler = UndoHandler()
+
         clientManager = DataManager(ClientValidator)
         movieManager = DataManager(MovieValidator)
         rentalManager = DataManager(RentalValidator)
@@ -29,7 +32,7 @@ def run_application():
         movieService = MovieService(movieManager)
         rentalService = RentalService(rentalManager)
 
-        console = Console(clientService, movieService, rentalService)
+        console = Console(clientService, movieService, rentalService, undoRedoHandler)
         console.startConsole()
     except Exception as ex:
         print("Exception: ", ex)
