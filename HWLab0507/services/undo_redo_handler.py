@@ -3,23 +3,11 @@
     @email:  ytgabi98@gmail.com
     @date:   11/26/2017 16:42
 """
-from zope.interface import interface
-
 
 class Operation(object):
-    def __init__(self, service, oldFunc, reverseFunc, *params):
-        self.__service = service
-        self.__oldFunc = oldFunc
+    def __init__(self, reverseFunc, *params):
         self.__reverseFunc = reverseFunc
         self.__params = params
-
-    @property
-    def service(self):
-        return self.__service
-
-    @property
-    def oldFunc(self):
-        return self.__oldFunc
 
     @property
     def reverseFunc(self):
@@ -30,39 +18,61 @@ class Operation(object):
         return self.__params
 
     def __str__(self):
-        s = str(self.service) + "\n" + str(self.oldFunc) + "\n" + str(self.reverseFunc) + "\n" + str(self.params)
+        s = str(self.reverseFunc) + "\n" + str(self.params)
         return s
 
 class UndoHandler(object):
 
     def __init__(self):
-        self.__operations = []
-        self.__operationsIndex = -1
+        self.__operationsUndo = []
+        self.__operationsRedo = []
+        self.__listIndex = -1
 
-    def registerOperation(self, service, oldFunc, reverseFunc, *params):
-        self.opList.append(Operation(service, oldFunc, reverseFunc, params))
-        self.opIndex = len(self.opList) - 1
+    def registerOperationUndo(self, reverseFunc, *params):
+        self.deleteAfterActions()
+        self.opListUndo.append(Operation(reverseFunc, params))
+        self.listIndex = len(self.opListUndo) - 1
 
-    def deleteLastOperation(self):
-        self.opList.pop()
-
-    @property
-    def opList(self):
-        return self.__operations
+    def registerOperationRedo(self, reverseFunc, *params):
+        self.opListRedo.append(Operation(reverseFunc, *params))
 
     @property
-    def opIndex(self):
-        return self.__operationsIndex
+    def opListUndo(self):
+        return self.__operationsUndo
 
-    @opIndex.setter
-    def opIndex(self, index):
-        self.__operationsIndex = index
+    @property
+    def opListRedo(self):
+        return self.__operationsRedo
+
+    @property
+    def listIndex(self):
+        return self.__listIndex
+
+    @listIndex.setter
+    def listIndex(self, index):
+        self.__listIndex = index
 
     def undo(self):
-        if len(self.opList) < 1:
+        if self.listIndex < 0:
             raise Exception("You have nothing to undo!")
 
-        op = self.opList.pop()
+        op = self.opListUndo[self.listIndex]
+        print(self.opListUndo)
+        print(op)
         op.reverseFunc(*op.params)
+        self.listIndex -= 1
 
+    def redo(self):
+        if self.listIndex+1 > len(self.__operationsRedo)-1:
+            raise Exception("You have nothing to redo!")
+
+        op = self.opListRedo[self.listIndex+1]
+        op.reverseFunc(*op.params)
+        self.listIndex += 1
+
+    def deleteAfterActions(self):
+        l = len(self.opListRedo)
+        for i in range(1, l - self.listIndex):
+            self.opListRedo.pop()
+            self.opListUndo.pop()
 

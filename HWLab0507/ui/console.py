@@ -62,15 +62,18 @@ class Console(object):
             if l == 1:
                 client = self.__consoleHelper.readClient()
                 self.__clientService.addClient(client)
-                self.__undoHandler.registerOperation(self.__clientService, self.__clientService.addClient, self.__clientService.removeClient, client.ID)
+                self.__undoHandler.registerOperationUndo(self.__clientService.removeClient, client.ID)
+                self.__undoHandler.registerOperationRedo(self.__clientService.addClient, client)
             if l == 2:
                 movie = self.__consoleHelper.readMovie()
                 self.__movieService.addMovie(movie)
-                self.__undoHandler.registerOperation(self.__movieService, self.__movieService.addMovie, self.__movieService.removeMovie, movie.ID)
+                self.__undoHandler.registerOperationUndo(self.__movieService.removeMovie, movie.ID)
+                self.__undoHandler.registerOperationRedo(self.__movieService.addMovie, movie)
             if l == 3:
                 rental = self.__consoleHelper.readRental()
                 self.__rentalService.addRental(rental)
-                self.__undoHandler.registerOperation(self.__rentalService, self.__rentalService.addRental, self.__rentalService.removeRental, rental.ID)
+                self.__undoHandler.registerOperationUndo(self.__rentalService.removeRental, rental.ID)
+                self.__undoHandler.registerOperationRedo(self.__rentalService.addRental, rental)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
@@ -88,12 +91,14 @@ class Console(object):
                 id = self.__consoleHelper.readID()
                 client = self.__clientService.getClient(id)
                 self.__clientService.removeClient(id)
-                self.__undoHandler.registerOperation(self.__clientService, self.__clientService.removeClient, self.__clientService.addClient, client)
+                self.__undoHandler.registerOperationUndo(self.__clientService.addClient, client)
+                self.__undoHandler.registerOperationRedo(self.__clientService.removeClient, client.ID)
             if l == 2:
                 id = self.__consoleHelper.readID()
                 movie = self.__movieService.getMovie(id)
                 self.__movieService.removeMovie(id)
-                self.__undoHandler.registerOperation(self.__movieService, self.__movieService.removeMovie, self.__movieService.addMovie, movie)
+                self.__undoHandler.registerOperationUndo(self.__movieService.addMovie, movie)
+                self.__undoHandler.registerOperationRedo(self.__movieService.removeMovie, movie.ID)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
@@ -111,12 +116,14 @@ class Console(object):
                 client = self.__consoleHelper.readClient()
                 clientCopy = self.__clientService.getClient(client.ID)
                 self.__clientService.updateClient(client)
-                self.__undoHandler.registerOperation(self.__clientService, self.__clientService.updateClient, self.__clientService.updateClient, clientCopy)
+                self.__undoHandler.registerOperationUndo(self.__clientService.updateClient, clientCopy)
+                self.__undoHandler.registerOperationRedo(self.__clientService.updateClient, client)
             if l == 2:
                 movie = self.__consoleHelper.readMovie()
                 movieCopy = self.__movieService.getMovie(movie.ID)
                 self.__movieService.updateMovie(movie)
-                self.__undoHandler.registerOperation(self.__movieService, self.__movieService.updateMovie, self.__movieService.updateMovie, movieCopy)
+                self.__undoHandler.registerOperationUndo(self.__movieService.updateMovie, movieCopy)
+                self.__undoHandler.registerOperationRedo(self.__movieService.updateMovie, movie)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
@@ -153,7 +160,8 @@ class Console(object):
             ValidateUserRentalStatus.validate(rental.clientID, self.__rentalService.getAllRentals(), rental.movieID)
             ValidateMovieCanBeRented.validate(rental.movieID, self.__movieService.getAllMovies())
             self.__rentalService.addRental(rental)
-            self.__undoHandler.registerOperation(self.__rentalService, self.__rentalService.addRental, self.__rentalService.removeRental, rental.ID)
+            self.__undoHandler.registerOperationUndo(self.__rentalService.removeRental, rental.ID)
+            self.__undoHandler.registerOperationRedo(self.__rentalService.addRental, rental)
         except Exception as ex:
             #self.__consoleHelper.printError(*ex.args)
             raise ex
@@ -174,7 +182,8 @@ class Console(object):
                 self.__rentalService.finishRental(rental)
                 rentalCpy = copy(rental)
                 rentalCpy.returnedDATE = None
-                self.__undoHandler.registerOperation(self.__rentalService, self.__rentalService.finishRental, self.__rentalService.updateRental, rentalCpy)
+                self.__undoHandler.registerOperationUndo(self.__rentalService.updateRental, rentalCpy)
+                self.__undoHandler.registerOperationRedo(self.__rentalService.updateRental, rental)
             else:
                 raise Exception("The rental with userID {0} and movieID {0} does not exist!".format(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID]))
 
