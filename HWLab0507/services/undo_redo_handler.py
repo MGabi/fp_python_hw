@@ -57,8 +57,6 @@ class UndoHandler(object):
             raise Exception("You have nothing to undo!")
 
         op = self.opListUndo[self.listIndex]
-        print(self.opListUndo)
-        print(op)
         op.reverseFunc(*op.params)
         self.listIndex -= 1
 

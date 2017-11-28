@@ -262,9 +262,9 @@ class Console(object):
                 option = consoleHelper.readCommand(10)
                 self.__cmdsDict[option]()
             except Exception as ex:
-                print("\nUP UP UP\n")
+                #print("\nUP UP UP\n")
                 consoleHelper.printError(*ex.args)
-                traceback.print_exc()
+                #traceback.print_exc()
 
     def printAllOf(self, type, elements):
         """

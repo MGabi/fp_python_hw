@@ -21,12 +21,6 @@ class RentalService(object):
         :param attrs: attributes of the rental
         :return: nothing
         """
-        # rental = Rental(attrs[Utils.RENTAL_ID],
-        #                 attrs[Utils.MOVIE_ID],
-        #                 attrs[Utils.CLIENT_ID],
-        #                 attrs[Utils.RENTED_DATE],
-        #                 attrs[Utils.DUE_DATE],
-        #                 attrs[Utils.RETURNED_DATE])
         self.__rentalManager.saveEntity(rental)
 
     def updateRental(self, rental):
