@@ -11,6 +11,8 @@ from domain.entities.movie import Movie
 from domain.entities.rental import Rental
 from domain.validators.client_validator import ClientValidator
 from domain.validators.movie_validator import MovieValidator
+from domain.validators.option_validator import OptionValidator
+from domain.validators.other_validations import ValidateUserRentalStatus, ValidateMovieCanBeRented
 from domain.validators.rental_validator import RentalValidator
 from services.client_service import ClientService
 from services.movie_service import MovieService
@@ -29,12 +31,8 @@ class TestUtils(TestCase):
         c1 = Client(1, "Jhon")
         c2 = Client(2, "Jhonny")
         l = {1: c1, 2: c2}
-        try:
-            Utils.queryList(l, "esdsdsds")
-            assert False
-        except Exception:
-            pass
-
+        with self.assertRaises(Exception):
+            Utils.queryList(l, "asdsdasda")
         self.assertEqual(Utils.queryList(l, "Jhonny"), {1: c2})
 
     def test_rentalDelay(self):
@@ -48,36 +46,35 @@ class TestClientService(TestCase):
         self.clientService = ClientService(self.dataManager)
 
         for i in range(1, 10):
-            # self.clientService.addClient({Utils.CLIENT_ID: i,
-            #                                 Utils.CLIENT_NAME: "Name" + str(i)})
             self.clientService.addClient(Client(i, "Name" + str(i)))
-    def test_addClient(self):
-        try:
-            # self.clientService.addClient({Utils.CLIENT_ID: 1, Utils.CLIENT_NAME: "Jhon"})
-            self.clientService.addClient(Client(1, "Jhon"))
-            assert False
-        except Exception as ex:
-            pass
 
-        c = self.clientService.getClient(2)
-        self.assertEqual(c.attrs, {Utils.CLIENT_ID: 2, Utils.CLIENT_NAME: "Name2"}, "Error add client")
+    def test_addClient(self):
+        with self.assertRaises(Exception):
+            self.clientService.addClient(Client(1, "Jhon"))
+
+        self.clientService.addClient((Client(33, "Name")))
+        self.clientService.addClient(Client(55, "Name"))
+        c = self.clientService.getClient(55)
+        self.assertEqual(c.attrs, {Utils.CLIENT_ID: 55, Utils.CLIENT_NAME: "Name"}, "Error add client")
 
     def test_updateClient(self):
-        # self.clientService.updateClient(1, {Utils.CLIENT_NAME: "Jhon"})
+        with self.assertRaises(Exception):
+            self.clientService.updateClient(Client(555, "Jhon"))
+
+        self.clientService.updateClient((Client(1, "Jhon")))
         self.clientService.updateClient(Client(1, "Jhon"))
         c = self.clientService.getClient(1)
         self.assertEqual(c.attrs, {Utils.CLIENT_ID: 1, Utils.CLIENT_NAME: "Jhon"})
 
     def test_removeClient(self):
         l = len(self.clientService.getAllClients())
-        try:
-            self.clientService.removeClient(-2)
-            assert False
-        except Exception:
-            pass
 
+        with self.assertRaises(Exception):
+            self.clientService.removeClient(-2)
+
+        self.clientService.removeClient((2))
         self.clientService.removeClient(3)
-        self.assertEqual(l-1, len(self.clientService.getAllClients()))
+        self.assertEqual(l-2, len(self.clientService.getAllClients()))
 
     def test_getAllClients(self):
         i = 1
@@ -86,11 +83,7 @@ class TestClientService(TestCase):
             i += 1
 
     def test_getClient(self):
-        try:
-            self.clientService.getClient(-3)
-            assert False
-        except Exception:
-            pass
+        self.assertEqual(self.clientService.getClient(-3), None)
 
         c = {Utils.CLIENT_ID: 5, Utils.CLIENT_NAME: "Name5"}
         self.assertEqual(c, self.clientService.getClient(5).attrs)
@@ -102,18 +95,11 @@ class TestMovieService(TestCase):
         self.movieService = MovieService(self.dataManager)
 
         for i in range(1, 10):
-            # self.movieService.addMovie({Utils.MOVIE_ID: i,
-            #                               Utils.MOVIE_TITLE: "Title" + str(i),
-            #                               Utils.MOVIE_DESCRIPTION: "Desc" + str(i),
-            #                               Utils.MOVIE_GENRE: "Genre" + str(i)})
             self.movieService.addMovie(Movie(i, "Title" + str(i), "Desc" + str(i), "Genre" + str(i)))
 
     def test_addMovie(self):
-        try:
+        with self.assertRaises(Exception):
             self.movieService.addMovie(Movie(1, "Title", "Desc", "Genre"))
-            assert False
-        except Exception as ex:
-            pass
 
         c = self.movieService.getMovie(2)
         self.assertEqual(c.attrs, {Utils.MOVIE_ID: 2,
@@ -122,9 +108,9 @@ class TestMovieService(TestCase):
                                     Utils.MOVIE_GENRE: "Genre2"}, "Error add movie")
 
     def test_updateMovie(self):
-        # self.movieService.updateMovie(1, {Utils.MOVIE_TITLE: "TitleX",
-        #                                 Utils.MOVIE_DESCRIPTION: "DescX",
-        #                                 Utils.MOVIE_GENRE: "GenreX"})
+        with self.assertRaises(Exception):
+            self.movieService.updateMovie(Movie(5555, "asfaw", "gaegea", "gaeage"))
+
         self.movieService.updateMovie(Movie(1, "TitleX", "DescX", "GenreX"))
         c = self.movieService.getMovie(1)
         self.assertEqual(c.attrs, {Utils.MOVIE_ID: 1,
@@ -134,11 +120,9 @@ class TestMovieService(TestCase):
 
     def test_removeMovie(self):
         l = len(self.movieService.getAllMovies())
-        try:
+
+        with self.assertRaises(Exception):
             self.movieService.removeMovie(-2)
-            assert False
-        except Exception:
-            pass
 
         self.movieService.removeMovie(3)
         self.assertEqual(l-1, len(self.movieService.getAllMovies()))
@@ -153,11 +137,7 @@ class TestMovieService(TestCase):
             i += 1
 
     def test_getMovie(self):
-        try:
-            self.movieService.getMovie(-3)
-            assert False
-        except Exception:
-            pass
+        self.assertEqual(self.movieService.getMovie(-3), None)
 
         c = {Utils.MOVIE_ID: 4,
             Utils.MOVIE_TITLE: "Title4",
@@ -165,40 +145,8 @@ class TestMovieService(TestCase):
             Utils.MOVIE_GENRE: "Genre4"}
         self.assertEqual(c, self.movieService.getMovie(4).attrs, c)
 
-# class TestRentalService(TestCase):
-#
-#     def setUp(self):
-#         self.dataManager = DataManager(RentalValidator)
-#         self.rentalService = RentalService(self.dataManager)
-#
-#         for i in range(1, 12):
-#             rDate = Utils.timestampFromDate(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2019)))
-#             #rDate = Utils.timestampFromDate(str(i%12) + "/" + str(i%12) + "/" + str(randint(2017, 2018)))
-#
-#             self.rentalService.addRental({Utils.RENTAL_ID: i,
-#                                             Utils.MOVIE_ID: randint(1, 9),
-#                                             Utils.CLIENT_ID: randint(1, 9),
-#                                             Utils.RENTED_DATE: rDate,
-#                                             Utils.DUE_DATE: rDate + Utils.CST_RENTAL_PERIOD,
-#                                             Utils.RETURNED_DATE: None})
-#
-#     def test_addRental(self):
-#         try:
-#             self.rentalService.addRental({Utils.RENTAL_ID: 1,
-#                                           Utils.MOVIE_ID: 1,
-#                                           Utils.CLIENT_ID: 1,
-#                                           Utils.RENTED_DATE: 12345315531,
-#                                           Utils.DUE_DATE: 13231321321,
-#                                           Utils.RETURNED_DATE: None})
-#             assert False
-#         except Exception as ex:
-#             pass
-#
-#         c = self.rentalService.getRental(2)
-#         self.assertEqual(c.attrs, {Utils.MOVIE_ID: 2,
-#                                     Utils.MOVIE_TITLE: "Title2",
-#                                     Utils.MOVIE_DESCRIPTION: "Desc2",
-#                                     Utils.MOVIE_GENRE: "Genre2"}, "Error add movie")
+class TestRentalService(TestCase):
+    pass
 
 class ValidateTest(object):
     @staticmethod
@@ -235,23 +183,14 @@ class TestDataService(TestCase):
         o = ObjForTest(1, "Name1")
         self.dataManager.saveEntity(o)
 
-        try:
-            o = ObjForTest(2, "NameX")
-            self.dataManager.saveEntity(o)
-            assert False, "Failed duplicate id validation"
-        except Exception:
-            pass
-
-        try:
+        with self.assertRaises(Exception):
             o = ObjForTest(3, 2321)
             self.dataManager.saveEntity(o)
-            assert False, "Failed name validation"
-        except Exception:
-            pass
 
     def test_getEntityById(self):
         self.dataManager.saveEntity(ObjForTest(1, "name"))
 
+        self.assertEqual(self.dataManager.getEntityById(-2), None)
         self.assertEqual(self.dataManager.getEntityById(1).ID, 1, "ID error")
         self.assertEqual(self.dataManager.getEntityById(1).name, "name", "Name error")
 
@@ -259,11 +198,8 @@ class TestDataService(TestCase):
         self.dataManager.saveEntity(ObjForTest(2, "Jhon"))
         self.dataManager.saveEntity(ObjForTest(3, "Marry"))
 
-        try:
+        with self.assertRaises(Exception):
             self.dataManager.updateEntity(5, ObjForTest(3, "Asd"))
-            assert False, "Failed duplicate id validation before udpating"
-        except Exception:
-            pass
 
         self.dataManager.updateEntity(2, ObjForTest(2, "Martin"))
         self.assertEqual(self.dataManager.getEntityById(2).ID, 2, "ID error")
@@ -273,16 +209,27 @@ class TestDataService(TestCase):
         self.dataManager.saveEntity(ObjForTest(1, "Jhon"))
         self.dataManager.saveEntity(ObjForTest(2, "Marry"))
 
-        try:
+        with self.assertRaises(Exception):
             self.dataManager.deleteEntityById(5)
-            assert False, "Failed checking unexisting ID"
-        except Exception:
-            pass
 
         self.dataManager.deleteEntityById(2)
 
         c = self.dataManager.getEntityById(2)
         self.assertEqual(c, None, "Failed deleting")
+
+    def test_entityExists(self):
+        o = ObjForTest(1, "asd")
+        self.dataManager.saveEntity(o)
+        self.assertEqual(self.dataManager.entityExists(2), False)
+        self.assertEqual(self.dataManager.entityExists(1), True)
+
+    def test_getEntities(self):
+        o = ObjForTest(1, "asd")
+        o2 = ObjForTest(2, "sadas")
+        self.dataManager.saveEntity(o)
+        self.dataManager.saveEntity(o2)
+
+        self.assertEqual(len(self.dataManager.getEntities()), 2)
 
 class TestClient(TestCase):
 
@@ -315,3 +262,124 @@ class TestMovie(TestCase):
         self.assertEqual(m.movieGENRE, "Genre", "Genre error")
         m.movieGENRE = "Genre 2"
         self.assertEqual(m.movieGENRE, "Genre 2", "Genre setting error")
+
+        self.assertEqual(m.attrs, {Utils.MOVIE_ID:2, Utils.MOVIE_TITLE: "Title 2", Utils.MOVIE_DESCRIPTION: "Desc 2", Utils.MOVIE_GENRE: "Genre 2"})
+
+class TestRental(TestCase):
+
+    def test_Rental(self):
+        r = Rental(1, 1, 1, 1000, 1400, None)
+        self.assertEqual(r.ID, 1, "ID Error")
+        r.ID = 2
+        self.assertEqual(r.ID, 2, "ID Error")
+
+        self.assertEqual(r.movieID, 1, "MovieID Error")
+        r.movieID = 2
+        self.assertEqual(r.movieID, 2, "MovieID Error")
+
+        self.assertEqual(r.clientID, 1, "ClientID Error")
+        r.clientID = 2
+        self.assertEqual(r.clientID, 2, "ClientID Error")
+
+        self.assertEqual(r.rentedDATE, 1000, "Rented date Error")
+        r.rentedDATE = 1001
+        self.assertEqual(r.rentedDATE, 1001, "Rented date Error")
+
+        self.assertEqual(r.dueDATE, 1400, "Due date Error")
+        r.dueDATE = 1401
+        self.assertEqual(r.dueDATE, 1401, "Due date Error")
+
+        self.assertEqual(r.returnedDATE, None, "Returned date Error")
+        r.returnedDATE = 1201
+        self.assertEqual(r.returnedDATE, 1201, "Returned date Error")
+
+        self.assertEqual(r.attrs, {Utils.RENTAL_ID: 2, Utils.MOVIE_ID: 2, Utils.CLIENT_ID: 2, Utils.RENTED_DATE: 1001, Utils.DUE_DATE: 1401, Utils.RETURNED_DATE: 1201}, "Attrs Error")
+
+class TestClientValidator(TestCase):
+
+    def test_validate(self):
+        c1 = Client("asd", "abcd")
+
+        with self.assertRaises(Exception):
+            ClientValidator.validate(c1)
+
+        c1 = Client(1, "ab")
+
+        with self.assertRaises(Exception):
+            ClientValidator.validate(c1)
+
+        c1 = Client(1, "abcd")
+
+        ClientValidator.validate(c1)
+
+class TestMovieValidator(TestCase):
+
+    def test_validate(self):
+        m1 = Movie(1, "abc", "abc", "abc")
+        m2 = Movie("abc", "abc", "abc", "abc")
+
+        with self.assertRaises(Exception):
+            MovieValidator.validate(m2)
+
+        MovieValidator.validate(m1)
+
+class TestOptionValidator(TestCase):
+
+    def test_validate(self):
+        with self.assertRaises(Exception):
+            OptionValidator.validate("asd", 1, 5)
+
+        with self.assertRaises(Exception):
+            OptionValidator.validate(-3, 1, 5)
+
+        OptionValidator.validate(2, 1, 5)
+
+class TestOtherValidation(TestCase):
+
+    def test_ValidateUserRentalStatus(self):
+        rentals = {1: Rental(1, 1, 1, 1000, 1400, 1200)}
+        cID = 1
+        mID = 1
+
+        with self.assertRaises(Exception):
+            ValidateUserRentalStatus.validate(cID, rentals, mID)
+
+        rentals = {1: Rental(1, 1, 1, 1511826429, 1521826429, None)}
+        with self.assertRaises(Exception):
+            ValidateUserRentalStatus.validate(cID, rentals, mID)
+
+        rentals = {1: Rental(1, 1, 1, 1511826429, 1521826429, None)}
+        ValidateUserRentalStatus.validate(cID, rentals, 2)
+
+    def test_ValidateMovieCanBeRented(self):
+        movies = {1:"abc", 2:"bcd"}
+
+        with self.assertRaises(Exception):
+            ValidateMovieCanBeRented.validate(3, movies)
+        ValidateMovieCanBeRented.validate(2, movies)
+
+class TestRentalValidator(TestCase):
+
+    def test_validate(self):
+        rental = Rental("abc", 1, 1, 1000, 1400, 1200)
+
+        with self.assertRaises(Exception):
+            RentalValidator.validate(rental)
+
+        rental = Rental(1, "abc", 1, 1000, 1400, 1200)
+
+        with self.assertRaises(Exception):
+            RentalValidator.validate(rental)
+
+        rental = Rental(1, 1, "abc", 1000, 1400, 1200)
+
+        with self.assertRaises(Exception):
+            RentalValidator.validate(rental)
+
+        rental = Rental(-2, 1, 1, 1000, 1400, 1200)
+
+        with self.assertRaises(Exception):
+            RentalValidator.validate(rental)
+
+        rental = Rental(1, 1, 1, 1000, 1400, 1200)
+        RentalValidator.validate(rental)
