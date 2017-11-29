@@ -11,9 +11,13 @@ class Client(object):
     This class holds data
     for a client object
     """
-    def __init__(self, clientID, clientNAME):
-        self.__clientID = clientID
-        self.__clientNAME = clientNAME
+    # def __init__(self, clientID, clientNAME):
+    #     self.__clientID = clientID
+    #     self.__clientNAME = clientNAME
+
+    def __init__(self, *args):
+        self.__clientID = args[0]
+        self.__clientNAME = args[1]
 
     @property
     def ID(self):
@@ -34,3 +38,6 @@ class Client(object):
     @property
     def attrs(self):
         return {Utils.CLIENT_ID: self.__clientID, Utils.CLIENT_NAME: self.__clientNAME}
+
+    def toTxt(self):
+        return str(self.ID) + ";" + self.clientNAME + "\n"

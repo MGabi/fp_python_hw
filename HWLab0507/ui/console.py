@@ -185,7 +185,7 @@ class Console(object):
                 self.__undoHandler.registerOperationUndo(self.__rentalService.updateRental, rentalCpy)
                 self.__undoHandler.registerOperationRedo(self.__rentalService.updateRental, rental)
             else:
-                raise Exception("The rental with userID {0} and movieID {0} does not exist!".format(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID]))
+                raise Exception("The rental with userID {0} and movieID {1} does not exist!".format(returnAttrs[Utils.CLIENT_ID], returnAttrs[Utils.MOVIE_ID]))
 
         except Exception as ex:
             #traceback.print_exc()
@@ -253,7 +253,8 @@ class Console(object):
         and execute it as needed using a command dictionary
         :return:
         """
-        self.addClientsMoviesRentals()
+
+        #self.addClientsMoviesRentals()
         self.__consoleHelper.printHeader()
         consoleHelper = self.__consoleHelper
         while True:
@@ -319,7 +320,7 @@ class Console(object):
             #                               Utils.MOVIE_GENRE: "Genre" + str(i)})
             self.__movieService.addMovie(Movie(i, "Title" + str(i), "Desc" + str(i), "Genre" + str(i)))
 
-        for i in range(1, 15):
+        for i in range(1, 10):
             rDate = Utils.timestampFromDate(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2019)))
             # self.__rentalService.addRental({Utils.RENTAL_ID: i,
             #                                 Utils.MOVIE_ID: randint(1, 9),

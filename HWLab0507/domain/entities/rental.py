@@ -12,13 +12,22 @@ class Rental(object):
     for a rental object
     """
 
-    def __init__(self, rentalID, movieID, clientID, rentedDATE, dueDATE, returnedDATE):
-        self.__rentalID = rentalID
-        self.__movieID = movieID
-        self.__clientID = clientID
-        self.__rentedDATE = rentedDATE
-        self.__dueDATE = dueDATE
-        self.__returnedDATE = returnedDATE
+    # def __init__(self, rentalID, movieID, clientID, rentedDATE, dueDATE, returnedDATE):
+    #     self.__rentalID = rentalID
+    #     self.__movieID = movieID
+    #     self.__clientID = clientID
+    #     self.__rentedDATE = rentedDATE
+    #     self.__dueDATE = dueDATE
+    #     self.__returnedDATE = returnedDATE
+
+    def __init__(self, *args):
+        self.__rentalID = args[0]
+        self.__movieID = args[1]
+        self.__clientID = args[2]
+        self.__rentedDATE = args[3]
+        self.__dueDATE = args[4]
+        self.__returnedDATE = args[5]
+
 
     @property
     def ID(self):
@@ -71,3 +80,6 @@ class Rental(object):
     @property
     def attrs(self):
         return {Utils.RENTAL_ID: self.ID, Utils.MOVIE_ID: self.movieID, Utils.CLIENT_ID: self.clientID, Utils.RENTED_DATE: self.rentedDATE, Utils.DUE_DATE: self.dueDATE, Utils.RETURNED_DATE: self.returnedDATE}
+
+    def toTxt(self):
+        return str(self.ID) + ";" + str(self.movieID) + ";" + str(self.clientID) + ";" + str(self.rentedDATE) + ";" + str(self.dueDATE) + ";" + str(self.returnedDATE) + "\n"

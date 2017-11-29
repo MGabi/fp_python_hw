@@ -11,11 +11,18 @@ class Movie(object):
     This class holds data
     for a movie object
     """
-    def __init__(self, movieID, movieTITLE, movieDESCRIPTION, movieGENRE):
-        self.__movieID = movieID
-        self.__movieTITLE = movieTITLE
-        self.__movieDESCRIPTION = movieDESCRIPTION
-        self.__movieGENRE = movieGENRE
+    # def __init__(self, movieID, movieTITLE, movieDESCRIPTION, movieGENRE):
+    #     self.__movieID = movieID
+    #     self.__movieTITLE = movieTITLE
+    #     self.__movieDESCRIPTION = movieDESCRIPTION
+    #     self.__movieGENRE = movieGENRE
+
+    def __init__(self, *args):
+        self.__movieID = args[0]
+        self.__movieTITLE = args[1]
+        self.__movieDESCRIPTION = args[2]
+        self.__movieGENRE = args[3]
+
 
     @property
     def ID(self):
@@ -52,3 +59,6 @@ class Movie(object):
     @property
     def attrs(self):
         return {Utils.MOVIE_ID: self.ID, Utils.MOVIE_TITLE: self.movieTITLE, Utils.MOVIE_DESCRIPTION: self.movieDESCRIPTION, Utils.MOVIE_GENRE: self.movieGENRE}
+
+    def toTxt(self):
+        return str(self.ID) + ";" + self.movieTITLE + ";" + self.movieDESCRIPTION + ";" + self.movieGENRE + "\n"

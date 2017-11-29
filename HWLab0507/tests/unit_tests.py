@@ -3,9 +3,12 @@
     @email:  ytgabi98@gmail.com
     @date:   11/21/2017 00:47
 """
+import pickle
 from unittest import TestCase
 
 from data.data_manager import DataManager
+from data.data_manager_pickle import DataManagerPickle
+from data.data_manager_text import DataManagerText
 from domain.entities.client import Client
 from domain.entities.movie import Movie
 from domain.entities.rental import Rental
@@ -248,9 +251,10 @@ class ValidateTest(object):
             raise Exception("Not a string")
 
 class ObjForTest(object):
-    def __init__(self, id, name):
-        self.__id = id
-        self.__name = name
+
+    def __init__(self, *args):
+        self.__id = args[0]
+        self.__name = args[1]
 
     @property
     def ID(self):
@@ -266,6 +270,9 @@ class ObjForTest(object):
 
     def __str__(self):
         return str(self.ID) + " " + self.name
+
+    def toTxt(self):
+        return str(self.ID) + ";" + self.name + "\n"
 
 class TestDataService(TestCase):
 
@@ -323,6 +330,116 @@ class TestDataService(TestCase):
         self.dataManager.saveEntity(o2)
 
         self.assertEqual(len(self.dataManager.getEntities()), 2)
+
+class TestDataManagerPickle(TestCase):
+
+    def setUp(self):
+        self.dataManager = DataManagerPickle(ValidateTest, "fileTestPickle")
+        f = open("fileTestPickle", "wb")
+        f.close()
+        self.dataManager.saveEntity(ObjForTest(1, "Name1"))
+        self.dataManager.saveEntity(ObjForTest(2, "Name2"))
+        self.dataManager.saveEntity(ObjForTest(3, "Name3"))
+        self.dataManager.saveEntity(ObjForTest(4, "Name4"))
+
+    def test_saveEntity(self):
+        self.dataManager.saveEntity(ObjForTest(5, "Name5"))
+        self.assertEqual(self.dataManager.getEntityById(5).name, "Name5")
+
+        with self.assertRaises(Exception):
+            self.dataManager.saveEntity(ObjForTest(3, 2321))
+
+    def test_getEntityById(self):
+        self.assertEqual(self.dataManager.getEntityById(-2), None)
+
+        e = self.dataManager.getEntityById(2)
+        self.assertEqual(e.ID, 2, "ID error")
+        self.assertEqual(e.name, "Name2", "Name error")
+
+    def test_updateEntity(self):
+        with self.assertRaises(Exception):
+            self.dataManager.updateEntity(5, ObjForTest(3, "Asd"))
+
+        self.dataManager.updateEntity(3, ObjForTest(3, "Name333"))
+        e = self.dataManager.getEntityById(3)
+        self.assertEqual(e.ID, 3, "ID error")
+        self.assertEqual(e.name, "Name333", "Name error")
+
+    def test_deleteEntityById(self):
+        with self.assertRaises(Exception):
+            self.dataManager.deleteEntityById(5)
+
+        self.dataManager.deleteEntityById(4)
+
+        c = self.dataManager.getEntityById(4)
+        self.assertEqual(c, None, "Failed deleting")
+
+    def test_entityExists(self):
+        self.assertEqual(self.dataManager.entityExists(1), True)
+        self.assertEqual(self.dataManager.entityExists(10), False)
+
+    def test_getEntities(self):
+        # for obj in self.dataManager.getEntities().values():
+        #     print(obj)
+        self.assertEqual(len(self.dataManager.getEntities()), 4)
+
+class TestDataManagerTxt(TestCase):
+
+    def setUp(self):
+        self.dataManager = DataManagerText(ValidateTest, "fileTestTxt", ObjForTest)
+        f = open("fileTestTxt", "w")
+        f.close()
+        self.dataManager.saveEntity(ObjForTest(1, "Name1"))
+        self.dataManager.saveEntity(ObjForTest(2, "Name2"))
+        self.dataManager.saveEntity(ObjForTest(3, "Name3"))
+        self.dataManager.saveEntity(ObjForTest(4, "Name4"))
+
+    def test_saveEntity(self):
+        self.dataManager.saveEntity(ObjForTest(5, "Name5"))
+        self.assertEqual(self.dataManager.getEntityById(5).name, "Name5")
+
+        with self.assertRaises(Exception):
+            self.dataManager.saveEntity(ObjForTest(3, 2321))
+
+    def test_getEntityById(self):
+        self.assertEqual(self.dataManager.getEntityById(-2), None)
+
+        e = self.dataManager.getEntityById(2)
+        self.assertEqual(e.ID, 2, "ID error")
+        self.assertEqual(e.name, "Name2", "Name error")
+
+    def test_updateEntity(self):
+        with self.assertRaises(Exception):
+            self.dataManager.updateEntity(5, ObjForTest(3, "Asd"))
+
+        self.dataManager.updateEntity(3, ObjForTest(3, "Name333"))
+        e = self.dataManager.getEntityById(3)
+        self.assertEqual(e.ID, 3, "ID error")
+        self.assertEqual(e.name, "Name333", "Name error")
+
+    def test_deleteEntityById(self):
+        with self.assertRaises(Exception):
+            self.dataManager.deleteEntityById(5)
+        for el in self.dataManager.getEntities().values():
+            print(el)
+            print(type(el.ID))
+            print(type(el.name))
+        self.dataManager.deleteEntityById(4)
+
+        c = self.dataManager.getEntityById(4)
+        self.assertEqual(c, None, "Failed deleting")
+
+    def test_entityExists(self):
+        o = self.dataManager.getEntityById(1)
+
+        self.assertEqual(self.dataManager.entityExists(1), True)
+        self.assertEqual(self.dataManager.entityExists(10), False)
+
+    def test_getEntities(self):
+        # for obj in self.dataManager.getEntities().values():
+        #     print(obj)
+        self.assertEqual(len(self.dataManager.getEntities()), 4)
+
 
 class TestClient(TestCase):
 
