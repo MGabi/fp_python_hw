@@ -11,12 +11,6 @@ class Movie(object):
     This class holds data
     for a movie object
     """
-    # def __init__(self, movieID, movieTITLE, movieDESCRIPTION, movieGENRE):
-    #     self.__movieID = movieID
-    #     self.__movieTITLE = movieTITLE
-    #     self.__movieDESCRIPTION = movieDESCRIPTION
-    #     self.__movieGENRE = movieGENRE
-
     def __init__(self, *args):
         self.__movieID = args[0]
         self.__movieTITLE = args[1]
@@ -62,3 +56,17 @@ class Movie(object):
 
     def toTxt(self):
         return str(self.ID) + ";" + self.movieTITLE + ";" + self.movieDESCRIPTION + ";" + self.movieGENRE + "\n"
+
+    @staticmethod
+    def createTableQuery():
+        return """CREATE TABLE IF NOT EXISTS movies
+                    (id INTEGER PRIMARY KEY,
+                    movieTitle VARCHAR(50),
+                    movieDescription VARCHAR(200),
+                    movieGenre VARCHAR (50))"""
+
+    def getTuple(self):
+        return tuple([self.ID, self.movieTITLE, self.movieDESCRIPTION, self.movieGENRE])
+
+    def getUpdateQuery(self):
+        return "UPDATE movies SET id=?, movieTitle='{0}', movieDescription='{1}', movieGenre='{2}' WHERE id=?".format(self.movieTITLE, self.movieDESCRIPTION, self.movieGENRE)

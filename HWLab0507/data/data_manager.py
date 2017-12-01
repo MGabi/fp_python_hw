@@ -32,7 +32,7 @@ class DataManager(object):
     def saveEntity(self, entity):
         """
         Saves the entity to the storage
-        Raise DataManagerException if another entity
+        Raise DataManagerSqlException if another entity
         with the same ID exists
         :param entity: entity that need to be stored
         :return: nothing
@@ -46,9 +46,9 @@ class DataManager(object):
     def updateEntity(self, entityID, entity):
         """
         Update an entity with id entityID
-        Raise DataManagerException if another entity
+        Raise DataManagerSqlException if another entity
         with the same ID exists
-        Raise DataManagerException if there's
+        Raise DataManagerSqlException if there's
         no entity with given id for update
         :param entityID: id for updating
         :param entity: an object with new attributes
@@ -64,7 +64,7 @@ class DataManager(object):
         """
         Deletes the entity with
         id entityID
-        Raise DataManagerException if there's
+        Raise DataManagerSqlException if there's
         no entity with given id for deleting
         :param entityID: id for deleting
         :return: nothing

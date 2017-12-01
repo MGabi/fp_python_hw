@@ -12,14 +12,6 @@ class Rental(object):
     for a rental object
     """
 
-    # def __init__(self, rentalID, movieID, clientID, rentedDATE, dueDATE, returnedDATE):
-    #     self.__rentalID = rentalID
-    #     self.__movieID = movieID
-    #     self.__clientID = clientID
-    #     self.__rentedDATE = rentedDATE
-    #     self.__dueDATE = dueDATE
-    #     self.__returnedDATE = returnedDATE
-
     def __init__(self, *args):
         self.__rentalID = args[0]
         self.__movieID = args[1]
@@ -83,3 +75,26 @@ class Rental(object):
 
     def toTxt(self):
         return str(self.ID) + ";" + str(self.movieID) + ";" + str(self.clientID) + ";" + str(self.rentedDATE) + ";" + str(self.dueDATE) + ";" + str(self.returnedDATE) + "\n"
+
+    @staticmethod
+    def createTableQuery():
+        return """CREATE TABLE IF NOT EXISTS rentals
+                        (id INTEGER PRIMARY KEY,
+                        movieId INTEGER,
+                        clientId INTEGER,
+                        rentedDate REAL,
+                        dueDate REAL,
+                        returnedDate REAL)"""
+
+    def getTuple(self):
+        r = ""
+        if self.returnedDATE == None:
+            r = "None"
+        else:
+            r = self.returnedDATE
+        return tuple([self.ID, self.movieID, self.clientID, self.rentedDATE, self.dueDATE, r])
+
+    def getUpdateQuery(self):
+        if self.__returnedDATE == None:
+            return "UPDATE rentals SET id=?, movieId={0}, clientId={1}, rentedDate={2}, dueDate={3}, returnedDate='{4}' WHERE id=?".format(self.movieID, self.clientID, self.rentedDATE, self.dueDATE, self.returnedDATE)
+        return "UPDATE rentals SET id=?, movieId={0}, clientId={1}, rentedDate={2}, dueDate={3}, returnedDate={4} WHERE id=?".format(self.movieID, self.clientID, self.rentedDATE, self.dueDATE, self.returnedDATE)

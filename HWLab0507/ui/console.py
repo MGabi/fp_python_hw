@@ -5,9 +5,7 @@
 """
 import traceback
 from random import randint
-
 from copy import copy
-
 from domain.entities.client import Client
 from domain.entities.movie import Movie
 from domain.entities.rental import Rental
@@ -37,10 +35,6 @@ class Console(object):
                            10: self.opRedo}
         self.__consoleHelper = ConsoleHelper()
         self.__undoHandler = undoRedoHandler
-
-    @staticmethod
-    def opSuccess():
-        print("success")
 
     def opExit(self):
         """
@@ -253,8 +247,6 @@ class Console(object):
         and execute it as needed using a command dictionary
         :return:
         """
-
-        #self.addClientsMoviesRentals()
         self.__consoleHelper.printHeader()
         consoleHelper = self.__consoleHelper
         while True:
@@ -265,16 +257,16 @@ class Console(object):
             except Exception as ex:
                 #print("\nUP UP UP\n")
                 consoleHelper.printError(*ex.args)
-                #traceback.print_exc()
+                traceback.print_exc()
 
-    def printAllOf(self, type, elements):
+    def printAllOf(self, headerType, elements):
         """
         Print a list of clients/movies/rentals
-        :param type: the header of the printing: e.g. Clients / Movies / Rentals
+        :param headerType: the header of the printing: e.g. Clients / Movies / Rentals
         :param elements: the dictonary that will be printed
         :return: nothing
         """
-        print(type, ":")
+        print(headerType, ":")
         for c in elements.values():
             for k, v in c.attrs.items():
                 if k in [Utils.RENTED_DATE, Utils.DUE_DATE, Utils.RETURNED_DATE]:
@@ -311,21 +303,9 @@ class Console(object):
 
     def addClientsMoviesRentals(self):
         for i in range(1, 10):
-            # self.__clientService.addClient({Utils.CLIENT_ID: i,
-            #                                 Utils.CLIENT_NAME: "Name" + str(i)})
             self.__clientService.addClient(Client(i, "Name" + str(i)))
-            # self.__movieService.addMovie({Utils.MOVIE_ID: i,
-            #                               Utils.MOVIE_TITLE: "Title" + str(i),
-            #                               Utils.MOVIE_DESCRIPTION: "Desc" + str(i),
-            #                               Utils.MOVIE_GENRE: "Genre" + str(i)})
             self.__movieService.addMovie(Movie(i, "Title" + str(i), "Desc" + str(i), "Genre" + str(i)))
 
         for i in range(1, 10):
             rDate = Utils.timestampFromDate(str(randint(1, 12)) + "/" + str(randint(1, 12)) + "/" + str(randint(2015, 2019)))
-            # self.__rentalService.addRental({Utils.RENTAL_ID: i,
-            #                                 Utils.MOVIE_ID: randint(1, 9),
-            #                                 Utils.CLIENT_ID: randint(1, 9),
-            #                                 Utils.RENTED_DATE: rDate,
-            #                                 Utils.DUE_DATE: rDate + Utils.CST_RENTAL_PERIOD,
-            #                                 Utils.RETURNED_DATE: None})
             self.__rentalService.addRental(Rental(i, randint(1, 9), randint(1, 9), rDate, rDate + Utils.CST_RENTAL_PERIOD, None))

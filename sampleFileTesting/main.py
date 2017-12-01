@@ -6,6 +6,7 @@
 import pickle
 
 import os
+import sqlite3
 from random import randint
 
 
@@ -37,37 +38,66 @@ class TestObj(object):
     def strForFile(self):
         return str(self.ID) + ";" + self.NAME + "\n"
 
-def readFromBinaryFile(fileName):
-    result = []
-    try:
-        f = open(fileName, "r")
-        line = f.readline().strip()
-        while len(line)>0:
-            try:
-                line = line.split(";")
-                result.append(TestObj(line[0], line[1]))
-                line = f.readline().strip()
-            except EOFError:
-                break
-        f.close()
-    except EOFError:
-        print("The file is empty")
-        return []
-    except IOError as ioe:
-        print("IO error:", str(ioe))
-        return []
-    f.close()
-    return result
+def readFromDB(fileName):
+    conn = sqlite3.connect(fileName)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM testobj")
+    l = cursor.fetchall()
+    conn.close()
+    return l
 
-def writeToBinaryFile(fileName, object):
-    f = open(fileName, "a")
-    f.write(object.strForFile())
-    f.close()
+def setupDB(fileName):
+    conn = sqlite3.connect(fileName)
+    cursor = conn.cursor()
+    sql_cmd = """
+    CREATE TABLE IF NOT EXISTS testobj (
+      id INTEGER PRIMARY KEY,
+      name VARCHAR(30)
+    )
+    """
+    cursor.execute(sql_cmd)
+    conn.commit()
+    conn.close()
+
+def save(fileName, obj):
+    try:
+        conn = sqlite3.connect(fileName)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO testobj VALUES (?, ?)", (obj.ID, obj.NAME, ))
+        conn.commit()
+        conn.close()
+    except Exception as ex:
+        print(str(ex))
+
+def update(fileName, object):
+    conn = sqlite3.connect(fileName)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE testobj SET id=?, name=? WHERE id=?", (object.ID, object.NAME, object.ID,))
+    conn.commit()
+    conn.close()
+
+def delete(fileName, ID):
+    conn = sqlite3.connect(fileName)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM testobj WHERE id=?", (ID,))
+    conn.commit()
+    conn.close()
 
 def main():
 
-    writeToBinaryFile("testfile", TestObj(randint(1, 15), "Name" + str(randint(1, 15))))
-    l = readFromBinaryFile("testfile")
-    for el in l:
-        print(el)
+    fileName = "testFileSQL.db"
+    setupDB(fileName)
+    save(fileName, TestObj(5, "Jhon"))
+    save(fileName, TestObj(3, "Marry"))
+    save(fileName, TestObj(5, "Alex"))
+    save(fileName, TestObj(9, "Roland"))
+    update(fileName, TestObj(3, "Martin"))
+    delete(fileName, 9)
+    #output: 5, Jhon / 3, Martin /
+
+    # l = readFromDB(fileName)
+    # for el in l:
+    #     print(type(el))
+    #     print(el)
+    print(tuple(TestObj(55, "JHONNY")))
 main()

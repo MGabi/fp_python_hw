@@ -5,6 +5,7 @@
 """
 import traceback
 
+from data.data_manage_sql import DataManagerSql
 from data.data_manager import DataManager
 from data.data_manager_pickle import DataManagerPickle
 from data.data_manager_text import DataManagerText
@@ -35,14 +36,19 @@ def run_application():
         # rentalManager = DataManager(RentalValidator)
 
         # WITH PICKLE SERIALIZATION
-        clientManager = DataManagerPickle(ClientValidator, "clients.pickle")
-        movieManager = DataManagerPickle(MovieValidator, "movies.pickle")
-        rentalManager = DataManagerPickle(RentalValidator, "rentals.pickle")
+        # clientManager = DataManagerPickle(ClientValidator, "clients.pickle")
+        # movieManager = DataManagerPickle(MovieValidator, "movies.pickle")
+        # rentalManager = DataManagerPickle(RentalValidator, "rentals.pickle")
 
         # WITH SIMPLE TXT FILES
         # clientManager = DataManagerText(ClientValidator, "clients.text", Client)
         # movieManager = DataManagerText(MovieValidator, "movies.text", Movie)
         # rentalManager = DataManagerText(RentalValidator, "rentals.text", Rental)
+
+        # WITH SQL
+        clientManager = DataManagerSql(ClientValidator, "moviestore", "clients", Client)
+        movieManager = DataManagerSql(MovieValidator, "moviestore", "movies", Movie)
+        rentalManager = DataManagerSql(RentalValidator, "moviestore", "rentals", Rental)
 
         clientService = ClientService(clientManager)
         movieService = MovieService(movieManager)

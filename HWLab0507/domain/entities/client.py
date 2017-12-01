@@ -11,10 +11,6 @@ class Client(object):
     This class holds data
     for a client object
     """
-    # def __init__(self, clientID, clientNAME):
-    #     self.__clientID = clientID
-    #     self.__clientNAME = clientNAME
-
     def __init__(self, *args):
         self.__clientID = args[0]
         self.__clientNAME = args[1]
@@ -41,3 +37,16 @@ class Client(object):
 
     def toTxt(self):
         return str(self.ID) + ";" + self.clientNAME + "\n"
+
+    @staticmethod
+    def createTableQuery():
+        return """CREATE TABLE IF NOT EXISTS clients
+                (id INTEGER PRIMARY KEY,
+                clientName VARCHAR(50))"""
+
+    def getTuple(self):
+        return tuple([self.ID, self.clientNAME])
+
+    def getUpdateQuery(self):
+        return "UPDATE clients SET id=?, clientName='{0}' WHERE id=?".format(self.clientNAME)
+
