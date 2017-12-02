@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b8252c13-551e-493f-acc6-9ba94adf63c5" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../HWLab0507/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/application.py" afterPath="$PROJECT_DIR$/../HWLab0507/application.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/data/data_manager.py" afterPath="$PROJECT_DIR$/../HWLab0507/data/data_manager.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/data/data_manager_pickle.py" afterPath="$PROJECT_DIR$/../HWLab0507/data/data_manager_pickle.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/data/data_manager_text.py" afterPath="$PROJECT_DIR$/../HWLab0507/data/data_manager_text.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/domain/entities/client.py" afterPath="$PROJECT_DIR$/../HWLab0507/domain/entities/client.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/domain/entities/movie.py" afterPath="$PROJECT_DIR$/../HWLab0507/domain/entities/movie.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/domain/entities/rental.py" afterPath="$PROJECT_DIR$/../HWLab0507/domain/entities/rental.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/domain/validators/client_validator.py" afterPath="$PROJECT_DIR$/../HWLab0507/domain/validators/client_validator.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/tests/unit_tests.py" afterPath="$PROJECT_DIR$/../HWLab0507/tests/unit_tests.py" />
-      <change beforePath="$PROJECT_DIR$/../HWLab0507/ui/console.py" afterPath="$PROJECT_DIR$/../HWLab0507/ui/console.py" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-    </list>
+    <list default="true" id="b8252c13-551e-493f-acc6-9ba94adf63c5" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +30,7 @@
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="520">
-              <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+              <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
               <folding>
                 <element signature="e#97#110#0" expanded="true" />
                 <marker date="1512130177710" expanded="true" signature="804:825" ph="SELECT * FRO... testobj" />
@@ -94,7 +79,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1080" />
     <option name="width" value="847" />
     <option name="height" value="1057" />
@@ -116,6 +101,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -127,7 +113,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -189,28 +174,27 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1080" y="0" width="847" height="1057" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3257329" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3257329" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20203304" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20415778" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
@@ -242,6 +226,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/testfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#97#110#0" expanded="true" />
+            <marker date="1512130177710" expanded="true" signature="804:825" ph="SELECT * FRO... testobj" />
+            <marker date="1512130177710" expanded="true" signature="994:1089" ph="CREATE TABLE... testobj" />
+            <marker date="1512130177710" expanded="true" signature="1292:1325" ph="INSERT INTO testobj... " />
+            <marker date="1512130177710" expanded="true" signature="1559:1601" ph="UPDATE testobj... " />
+            <marker date="1512130177710" expanded="true" signature="1788:1817" ph="DELETE FROM testobj... " />
+            <marker date="1512130177710" expanded="true" signature="1788:1818" ph="DELETE FROM testobj... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/sqlite3.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2444">
@@ -254,7 +262,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="131378">
           <caret line="5053" column="8" lean-forward="false" selection-start-line="5053" selection-start-column="8" selection-end-line="5053" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -262,7 +269,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40638">
           <caret line="1574" column="4" lean-forward="false" selection-start-line="1574" selection-start-column="4" selection-end-line="1574" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -286,7 +292,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="131378">
           <caret line="5053" column="8" lean-forward="false" selection-start-line="5053" selection-start-column="8" selection-end-line="5053" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -294,7 +299,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40638">
           <caret line="1574" column="4" lean-forward="false" selection-start-line="1574" selection-start-column="4" selection-end-line="1574" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -318,7 +322,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="131378">
           <caret line="5053" column="8" lean-forward="false" selection-start-line="5053" selection-start-column="8" selection-end-line="5053" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -326,7 +329,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40924">
           <caret line="1574" column="4" lean-forward="false" selection-start-line="1574" selection-start-column="4" selection-end-line="1574" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -350,7 +352,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="131378">
           <caret line="5053" column="8" lean-forward="false" selection-start-line="5053" selection-start-column="8" selection-end-line="5053" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -358,7 +359,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40638">
           <caret line="1574" column="4" lean-forward="false" selection-start-line="1574" selection-start-column="4" selection-end-line="1574" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -366,7 +366,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40638">
           <caret line="1574" column="4" lean-forward="false" selection-start-line="1574" selection-start-column="4" selection-end-line="1574" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -381,7 +380,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="521">
           <caret line="5053" column="8" lean-forward="false" selection-start-line="5053" selection-start-column="8" selection-end-line="5053" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -404,7 +402,7 @@
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="520">
-          <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+          <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
           <folding>
             <element signature="e#97#110#0" expanded="true" />
             <marker date="1512130177710" expanded="true" signature="804:825" ph="SELECT * FRO... testobj" />
