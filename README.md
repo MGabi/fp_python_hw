@@ -1,12 +1,13 @@
 # FP homeworks & related projects
 **Language used:** Python
-**IDE:** PYCharm PR
+**IDE:** PYCharm PRO
 ### Content
   * [Assignment 02]
   * [Assignment 03-04] - problem 2
   * [Assignment 05-07] - problem 3
   * [Assignment 08] (built over assignment 05-07)
     * SQL based manager for 0.2p bonus added
+	* JSON based manager for 0.1p bonus added
   * Partial test from week 07
 
 # License

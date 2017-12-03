@@ -38,6 +38,13 @@ class Client(object):
     def toTxt(self):
         return str(self.ID) + ";" + self.clientNAME + "\n"
 
+    def toJson(self):
+        return {"id": self.ID, Utils.CLIENT_NAME: self.clientNAME}
+
+    @staticmethod
+    def makeFromJson(dictData):
+        return Client(dictData["id"], dictData[Utils.CLIENT_NAME])
+
     @staticmethod
     def createTableQuery():
         return """CREATE TABLE IF NOT EXISTS clients

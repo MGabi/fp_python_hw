@@ -7,6 +7,7 @@ import traceback
 
 from data.data_manage_sql import DataManagerSql
 from data.data_manager import DataManager
+from data.data_manager_json import DataManagerJson
 from data.data_manager_pickle import DataManagerPickle
 from data.data_manager_text import DataManagerText
 from domain.entities.client import Client
@@ -46,9 +47,16 @@ def run_application():
         # rentalManager = DataManagerText(RentalValidator, "rentals.text", Rental)
 
         # WITH SQL
-        clientManager = DataManagerSql(ClientValidator, "moviestore", "clients", Client)
-        movieManager = DataManagerSql(MovieValidator, "moviestore", "movies", Movie)
-        rentalManager = DataManagerSql(RentalValidator, "moviestore", "rentals", Rental)
+        # clientManager = DataManagerSql(ClientValidator, "moviestore", "clients", Client)
+        # movieManager = DataManagerSql(MovieValidator, "moviestore", "movies", Movie)
+        # rentalManager = DataManagerSql(RentalValidator, "moviestore", "rentals", Rental)
+
+        # WITH JSON
+        clientManager = DataManagerJson(ClientValidator, "clientsJSON", "clients", Client)
+        movieManager = DataManagerJson(MovieValidator, "moviesJSON", "movies", Movie)
+        rentalManager = DataManagerJson(RentalValidator, "rentalsJSON", "rentals", Rental)
+
+
 
         clientService = ClientService(clientManager)
         movieService = MovieService(movieManager)

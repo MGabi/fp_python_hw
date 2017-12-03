@@ -247,6 +247,7 @@ class Console(object):
         and execute it as needed using a command dictionary
         :return:
         """
+        #self.addClientsMoviesRentals()
         self.__consoleHelper.printHeader()
         consoleHelper = self.__consoleHelper
         while True:

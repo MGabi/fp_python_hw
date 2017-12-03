@@ -8,6 +8,7 @@ from unittest import TestCase
 
 from data.data_manage_sql import DataManagerSql
 from data.data_manager import DataManager
+from data.data_manager_json import DataManagerJson
 from data.data_manager_pickle import DataManagerPickle
 from data.data_manager_text import DataManagerText
 from domain.entities.client import Client
@@ -276,6 +277,13 @@ class ObjForTest(object):
     def toTxt(self):
         return str(self.ID) + ";" + self.name + "\n"
 
+    def toJson(self):
+        return {"id": self.ID, "name": self.name}
+
+    @staticmethod
+    def makeFromJson(data):
+        return ObjForTest(data["id"], data["name"])
+
     @staticmethod
     def createTableQuery():
         return """CREATE TABLE IF NOT EXISTS objects
@@ -434,10 +442,6 @@ class TestDataManagerTxt(TestCase):
     def test_deleteEntityById(self):
         with self.assertRaises(Exception):
             self.dataManager.deleteEntityById(5)
-        for el in self.dataManager.getEntities().values():
-            print(el)
-            print(type(el.ID))
-            print(type(el.name))
         self.dataManager.deleteEntityById(4)
 
         c = self.dataManager.getEntityById(4)
@@ -453,6 +457,82 @@ class TestDataManagerTxt(TestCase):
         # for obj in self.dataManager.getEntities().values():
         #     print(obj)
         self.assertEqual(len(self.dataManager.getEntities()), 4)
+
+
+
+
+class TestDataManagerJson(TestCase):
+
+    def setUp(self):
+        f = open("fileTestJson", "w")
+        f.close()
+        self.dataManager = DataManagerJson(ValidateTest, "fileTestJson", "objects", ObjForTest)
+        try:
+            self.dataManager.saveEntity(ObjForTest(1, "Name1"))
+        except Exception as ex:
+            # print(str(ex))
+            pass
+
+        try:
+            self.dataManager.saveEntity(ObjForTest(2, "Name2"))
+        except Exception as ex:
+            print(str(ex))
+
+        try:
+            self.dataManager.saveEntity(ObjForTest(3, "Name3"))
+        except Exception as ex:
+            print(str(ex))
+
+        try:
+            self.dataManager.saveEntity(ObjForTest(4, "Name4"))
+        except Exception as ex:
+            print(str(ex))
+
+        try:
+            self.dataManager.saveEntity(ObjForTest(5, "Name5"))
+        except Exception as ex:
+            print(str(ex))
+
+    def test_saveEntity(self):
+        self.assertEqual(self.dataManager.getEntityById(5).name, "Name5")
+
+        with self.assertRaises(Exception):
+            self.dataManager.saveEntity(ObjForTest(3, 2321))
+
+    def test_getEntityById(self):
+        self.assertEqual(self.dataManager.getEntityById(-2), None)
+
+        e = self.dataManager.getEntityById(2)
+        self.assertEqual(e.ID, 2, "ID error")
+        self.assertEqual(e.name, "Name2", "Name error")
+
+    def test_updateEntity(self):
+        with self.assertRaises(Exception):
+            self.dataManager.updateEntity(6, ObjForTest(3, "Asd"))
+
+        self.dataManager.updateEntity(3, ObjForTest(3, "Name333"))
+        e = self.dataManager.getEntityById(3)
+        self.assertEqual(e.ID, 3, "ID error")
+        self.assertEqual(e.name, "Name333", "Name error")
+
+    def test_deleteEntityById(self):
+        with self.assertRaises(Exception):
+            self.dataManager.deleteEntityById(6)
+
+        self.dataManager.deleteEntityById(4)
+
+        c = self.dataManager.getEntityById(4)
+        self.assertEqual(c, None, "Failed deleting")
+
+    def test_entityExists(self):
+        o = self.dataManager.getEntityById(1)
+
+        self.assertEqual(self.dataManager.entityExists(1), True)
+        self.assertEqual(self.dataManager.entityExists(10), False)
+
+    def test_getEntities(self):
+        self.assertEqual(len(self.dataManager.getEntities()), 5)
+
 
 class TestDataManagerSql(TestCase):
 
@@ -689,7 +769,6 @@ class ListObj(list):
         super(ListObj, self).append(obj)
 
     def remove(self, id):
-        print("here")
         super(ListObj, self).remove(id[0])
 
 class TestUndoHandler(TestCase):

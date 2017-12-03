@@ -3,6 +3,7 @@
     @email:  ytgabi98@gmail.com
     @date:   11/29/2017 16:52
 """
+import json
 import pickle
 
 import os
@@ -38,66 +39,56 @@ class TestObj(object):
     def strForFile(self):
         return str(self.ID) + ";" + self.NAME + "\n"
 
-def readFromDB(fileName):
-    conn = sqlite3.connect(fileName)
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM testobj")
-    l = cursor.fetchall()
-    conn.close()
-    return l
+    def toJson(self):
+        return {"id": self.ID, "name": self.NAME}
 
-def setupDB(fileName):
-    conn = sqlite3.connect(fileName)
-    cursor = conn.cursor()
-    sql_cmd = """
-    CREATE TABLE IF NOT EXISTS testobj (
-      id INTEGER PRIMARY KEY,
-      name VARCHAR(30)
-    )
-    """
-    cursor.execute(sql_cmd)
-    conn.commit()
-    conn.close()
+def readAll(fileName):
+    with open(fileName, "r") as jsonFile:
+        try:
+            return json.load(jsonFile)
+        except Exception as ex:
+            print(str(ex))
+        return {}
 
-def save(fileName, obj):
-    try:
-        conn = sqlite3.connect(fileName)
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO testobj VALUES (?, ?)", (obj.ID, obj.NAME, ))
-        conn.commit()
-        conn.close()
-    except Exception as ex:
-        print(str(ex))
+def writeAll(fileName, data):
+    with open(fileName, "w") as out:
+        json.dump(data, out)
 
-def update(fileName, object):
-    conn = sqlite3.connect(fileName)
-    cursor = conn.cursor()
-    cursor.execute("UPDATE testobj SET id=?, name=? WHERE id=?", (object.ID, object.NAME, object.ID,))
-    conn.commit()
-    conn.close()
+def save(fileName, node, obj):
+    data = readAll(fileName)
+    if node not in data.keys():
+        data[node] = {}
+    data[node][str(obj.ID)] = obj.toJson()
+    writeAll(fileName, data)
 
-def delete(fileName, ID):
-    conn = sqlite3.connect(fileName)
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM testobj WHERE id=?", (ID,))
-    conn.commit()
-    conn.close()
+def update(fileName, node, object):
+    data = readAll(fileName)
+    data[node][str(object.ID)] = object.toJson()
+    writeAll(fileName, data)
+
+def delete(fileName, node, ID):
+    data = readAll(fileName)
+    data[node].pop(str(ID))
+    writeAll(fileName, data)
+
 
 def main():
+    fileName = "testFileJSON"
+    f = open(fileName, "a")
+    f.close()
+    save(fileName, "test", TestObj(3, "Name3"))
+    save(fileName, "test", TestObj(5, "Name5"))
+    save(fileName, "test", TestObj(4, "Name4"))
+    print("")
+    print(readAll(fileName))
+    print("")
+    update(fileName, "test", TestObj(3, "333"))
+    delete(fileName, "test", 5)
+    print("")
+    print(readAll(fileName))
+    print("")
+    #output : 3 5 4
+    # 3, 333
+    # 4, Name4
 
-    fileName = "testFileSQL.db"
-    setupDB(fileName)
-    save(fileName, TestObj(5, "Jhon"))
-    save(fileName, TestObj(3, "Marry"))
-    save(fileName, TestObj(5, "Alex"))
-    save(fileName, TestObj(9, "Roland"))
-    update(fileName, TestObj(3, "Martin"))
-    delete(fileName, 9)
-    #output: 5, Jhon / 3, Martin /
-
-    # l = readFromDB(fileName)
-    # for el in l:
-    #     print(type(el))
-    #     print(el)
-    print(tuple(TestObj(55, "JHONNY")))
 main()

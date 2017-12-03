@@ -57,6 +57,13 @@ class Movie(object):
     def toTxt(self):
         return str(self.ID) + ";" + self.movieTITLE + ";" + self.movieDESCRIPTION + ";" + self.movieGENRE + "\n"
 
+    def toJson(self):
+        return {"id": self.ID, Utils.MOVIE_TITLE: self.movieTITLE, Utils.MOVIE_DESCRIPTION: self.movieDESCRIPTION, Utils.MOVIE_GENRE: self.movieGENRE}
+
+    @staticmethod
+    def makeFromJson(dictData):
+        return Movie(dictData["id"], dictData[Utils.MOVIE_TITLE], dictData[Utils.MOVIE_DESCRIPTION], dictData[Utils.MOVIE_DESCRIPTION], dictData[Utils.MOVIE_GENRE])
+
     @staticmethod
     def createTableQuery():
         return """CREATE TABLE IF NOT EXISTS movies

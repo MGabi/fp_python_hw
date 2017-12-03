@@ -73,6 +73,13 @@ class Rental(object):
     def attrs(self):
         return {Utils.RENTAL_ID: self.ID, Utils.MOVIE_ID: self.movieID, Utils.CLIENT_ID: self.clientID, Utils.RENTED_DATE: self.rentedDATE, Utils.DUE_DATE: self.dueDATE, Utils.RETURNED_DATE: self.returnedDATE}
 
+    def toJson(self):
+        return {"id": self.ID, Utils.MOVIE_ID: self.movieID, Utils.CLIENT_ID: self.clientID, Utils.RENTED_DATE: self.rentedDATE, Utils.DUE_DATE: self.dueDATE, Utils.RETURNED_DATE: self.returnedDATE}
+
+    @staticmethod
+    def makeFromJson(dictData):
+        return Rental(dictData["id"], dictData[Utils.MOVIE_ID], dictData[Utils.CLIENT_ID], dictData[Utils.RENTED_DATE], dictData[Utils.DUE_DATE], dictData[Utils.RETURNED_DATE])
+
     def toTxt(self):
         return str(self.ID) + ";" + str(self.movieID) + ";" + str(self.clientID) + ";" + str(self.rentedDATE) + ";" + str(self.dueDATE) + ";" + str(self.returnedDATE) + "\n"
 
