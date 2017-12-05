@@ -19,6 +19,7 @@ from domain.validators.rental_validator import RentalValidator
 from services.client_service import ClientService
 from services.movie_service import MovieService
 from services.rental_service import RentalService
+from services.settings import Settings
 from services.undo_redo_handler import UndoHandler
 from ui.console import Console
 
@@ -30,33 +31,41 @@ def run_application():
     """
     try:
         undoRedoHandler = UndoHandler()
+        dataManagerType = Settings.getDataManagerType()
 
-        # IN MEMORY
-        # clientManager = DataManager(ClientValidator)
-        # movieManager = DataManager(MovieValidator)
-        # rentalManager = DataManager(RentalValidator)
+        clientManager = None
+        movieManager = None
+        rentalManager = None
 
-        # WITH PICKLE SERIALIZATION
-        # clientManager = DataManagerPickle(ClientValidator, "clients.pickle")
-        # movieManager = DataManagerPickle(MovieValidator, "movies.pickle")
-        # rentalManager = DataManagerPickle(RentalValidator, "rentals.pickle")
+        if dataManagerType == "memory":
+            # IN MEMORY
+            clientManager = DataManager(ClientValidator)
+            movieManager = DataManager(MovieValidator)
+            rentalManager = DataManager(RentalValidator)
+        elif dataManagerType == "pickle":
+            # WITH PICKLE SERIALIZATION
+            clientManager = DataManagerPickle(ClientValidator, "clients.pickle")
+            movieManager = DataManagerPickle(MovieValidator, "movies.pickle")
+            rentalManager = DataManagerPickle(RentalValidator, "rentals.pickle")
+        elif dataManagerType == "text":
+            # WITH SIMPLE TXT FILES:
+            clientManager = DataManagerText(ClientValidator, "clients.text", Client)
+            movieManager = DataManagerText(MovieValidator, "movies.text", Movie)
+            rentalManager = DataManagerText(RentalValidator, "rentals.text", Rental)
+        elif dataManagerType == "sql":
+            # WITH SQL
+            clientManager = DataManagerSql(ClientValidator, "moviestore", "clients", Client)
+            movieManager = DataManagerSql(MovieValidator, "moviestore", "movies", Movie)
+            rentalManager = DataManagerSql(RentalValidator, "moviestore", "rentals", Rental)
+        elif dataManagerType == "json":
+            # WITH JSON
+            clientManager = DataManagerJson(ClientValidator, "clientsJSON", "clients", Client)
+            movieManager = DataManagerJson(MovieValidator, "moviesJSON", "movies", Movie)
+            rentalManager = DataManagerJson(RentalValidator, "rentalsJSON", "rentals", Rental)
 
-        # WITH SIMPLE TXT FILES
-        # clientManager = DataManagerText(ClientValidator, "clients.text", Client)
-        # movieManager = DataManagerText(MovieValidator, "movies.text", Movie)
-        # rentalManager = DataManagerText(RentalValidator, "rentals.text", Rental)
-
-        # WITH SQL
-        # clientManager = DataManagerSql(ClientValidator, "moviestore", "clients", Client)
-        # movieManager = DataManagerSql(MovieValidator, "moviestore", "movies", Movie)
-        # rentalManager = DataManagerSql(RentalValidator, "moviestore", "rentals", Rental)
-
-        # WITH JSON
-        clientManager = DataManagerJson(ClientValidator, "clientsJSON", "clients", Client)
-        movieManager = DataManagerJson(MovieValidator, "moviesJSON", "movies", Movie)
-        rentalManager = DataManagerJson(RentalValidator, "rentalsJSON", "rentals", Rental)
-
-
+        print("clientManager: ", type(clientManager))
+        print("movieManager: ", type(movieManager))
+        print("rentalManager: ", type(rentalManager))
 
         clientService = ClientService(clientManager)
         movieService = MovieService(movieManager)
