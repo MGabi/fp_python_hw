@@ -5,6 +5,9 @@
 """
 import pickle
 
+from domain.entities.my_dict import MyDict
+
+
 class DataManagerPickleException(Exception):
     pass
 
@@ -106,7 +109,7 @@ class DataManagerPickle(object):
         :return: the dict of entities
         """
         #return self.__entities
-        objects = {}
+        objects = MyDict()
         try:
             f = open(self.__filename, "rb")
             while True:

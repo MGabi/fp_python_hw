@@ -8,6 +8,7 @@
   * [Assignment 08] (built over assignment 05-07)
     * SQL based manager for 0.2p bonus added
 	* JSON based manager for 0.1p bonus added
+  * [Assignment 09] (built over assignment 05-07)
   * Partial test from week 07
 
 # License
@@ -34,3 +35,4 @@ Copyright 2017 @ Matko Gabriel Mihai
    [Assignment 03-04]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.03-04.pdf>
    [Assignment 05-07]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.05-07.pdf>
    [Assignment 08]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.08.pdf>
+   [Assignment 09]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.09.pdf>

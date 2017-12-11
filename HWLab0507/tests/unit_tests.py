@@ -234,7 +234,7 @@ class TestRentalService(TestCase):
 
     def test_getAllRentedMovies(self):
         l = self.rentalService.getAllRentedMovies()
-        self.assertEqual(l, [9, 8, 7, 6, 5, 4, 3, 2, 1])
+        self.assertEqual(l, [9, 8, 7, 6, 5, 4, 3, 2, 1, 1])
 
     def test_getLateRentals(self):
         l = self.rentalService.getLateRentals()
@@ -330,10 +330,10 @@ class TestDataService(TestCase):
     def test_deleteEntityById(self):
         self.dataManager.saveEntity(ObjForTest(1, "Jhon"))
         self.dataManager.saveEntity(ObjForTest(2, "Marry"))
-
         with self.assertRaises(Exception):
             self.dataManager.deleteEntityById(5)
 
+        print(self.dataManager.getEntities()[2])
         self.dataManager.deleteEntityById(2)
 
         c = self.dataManager.getEntityById(2)

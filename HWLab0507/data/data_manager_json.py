@@ -6,6 +6,9 @@
 import json
 import traceback
 
+from domain.entities.my_dict import MyDict
+
+
 class DataManagerJsonException(Exception):
     pass
 
@@ -38,7 +41,7 @@ class DataManagerJson(object):
                 return json.load(jsonFile)
             except Exception as ex:
                 print(str(ex))
-            return {}
+            return MyDict()
 
     def writeAll(self, data):
         with open(self.__fileName, "w") as out:
@@ -123,7 +126,7 @@ class DataManagerJson(object):
         :return: the list of entities
         """
         data = self.readAll()
-        entities = {}
+        entities = MyDict()
         for el in data[self.__node].values():
             entities[el["id"]] = self.__objClass.makeFromJson(el)
         return entities

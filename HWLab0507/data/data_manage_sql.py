@@ -5,6 +5,7 @@
 """
 import sqlite3
 
+from domain.entities.my_dict import MyDict
 from domain.entities.rental import Rental
 
 """
@@ -122,7 +123,7 @@ class DataManagerSql(object):
         Return all entities
         :return: the list of entities
         """
-        entities = {}
+        entities = MyDict()
         conn, cursor = self.getCursor()
         cursor.execute("SELECT * FROM {0}".format(self.__tableName))
         l = cursor.fetchall()

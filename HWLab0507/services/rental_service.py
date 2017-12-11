@@ -5,6 +5,7 @@
 """
 import operator
 
+from domain.entities.my_dict import MyDict
 from domain.entities.rental import Rental
 from services.utils import *
 
@@ -56,14 +57,19 @@ class RentalService(object):
         :return: a list of tuples like (x, y) -> x is the movie ID
         and the y is the number of times it was rented
         """
-        movies = {}
+        movies = MyDict()
         for rental in self.getAllRentals().values():
             if rental.movieID in movies:
                 movies[rental.movieID] += 1
             else:
                 movies[rental.movieID] = 1
 
-        return sorted(movies.items(), key = operator.itemgetter(1), reverse = True)
+        finals = []
+        for k, days in movies.items():
+            finals.append(tuple([k, days]))
+
+        return movies.sort(self.isHigher, finals)
+       # return sorted(movies.items(), key = operator.itemgetter(1), reverse = True)
 
     def getMostActiveClients(self):
         """
@@ -73,14 +79,19 @@ class RentalService(object):
         :return: a list of tuples like (x, y) -> x is the client ID
         and the y is the number of days of all its rentals
         """
-        clients = {}
+        clients = MyDict()
         for rental in self.getAllRentals().values():
             if rental.clientID in clients:
                 clients[rental.clientID] += 14
             else:
                 clients[rental.clientID] = 14
 
-        return sorted(clients.items(), key = operator.itemgetter(1), reverse = True)
+        finals = []
+        for k, days in clients.items():
+            finals.append(tuple([k, days]))
+
+        return clients.sort(self.isHigher, finals)
+        #return sorted(clients.items(), key = operator.itemgetter(1), reverse = True)
 
     def getAllRentedMovies(self):
         """
@@ -88,12 +99,21 @@ class RentalService(object):
         actively rented by clients
         :return: a list with all IDs of rented movies
         """
+        rentalsMap = self.__rentalManager.getEntities().filter(self.isMovieRented)
         movs = []
-        for rental in self.getAllRentals().values():
-            if rental.movieID not in movs and rental.returnedDATE is None:
-                movs.append(rental.movieID)
+        for rental in rentalsMap:
+            movs.append(rental.movieID)
 
-        return sorted(movs, reverse  = True)
+        #return sorted(movs, reverse = True)
+        return self.__rentalManager.getEntities().sort(self.haveMoreMovies, movs)
+
+    @staticmethod
+    def haveMoreMovies(c1, c2):
+        return c1 > c2
+
+    @staticmethod
+    def isMovieRented(rent, finalList):
+        return rent.movieID not in finalList and rent.returnedDATE is None
 
     def getLateRentals(self):
         """
@@ -103,13 +123,25 @@ class RentalService(object):
         :return: a list of tuples like (x, y) -> x is the rental ID
         and the y is the number of days for the delay of late rental
         """
-        rentals = {}
-        for rental in self.getAllRentals().values():
-            delay = Utils.rentalDelay(rental)
-            if delay >= 0:
-                rentals[rental.ID] = int(delay/60/60/24)
+        lateRents = self.__rentalManager.getEntities().filter(self.isLateRental)
+        finalRents = MyDict()
+        for rent in lateRents:
+            finalRents[rent.ID] = int(Utils.rentalDelay(rent)/60/60/60)
 
-        return sorted(rentals.items(), key = operator.itemgetter(1), reverse = True)
+        finals = []
+        for k, days in finalRents.items():
+            finals.append(tuple([k, days]))
+
+        return finalRents.sort(self.isHigher, finals)
+
+    @staticmethod
+    def isLateRental(rental, finalList):
+        return Utils.rentalDelay(rental) > 0
+
+    @staticmethod
+    def isHigher(v1, v2):
+        return v1[1] > v2[1]
+
 
     def removeRental(self, id):
         if isinstance(id, tuple):

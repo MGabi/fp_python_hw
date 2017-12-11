@@ -5,6 +5,9 @@
 """
 import traceback
 
+from domain.entities.my_dict import MyDict
+
+
 class DataManagerException(Exception):
     pass
 
@@ -15,7 +18,8 @@ class DataManager(object):
     """
     def __init__(self, entityValidator):
         self.__entityValidator = entityValidator
-        self.__entities = {}
+        self.__entities = MyDict()
+        # self.__entities = {}
 
     def getEntityById(self, entityID):
         """
