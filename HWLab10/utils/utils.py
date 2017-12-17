@@ -37,6 +37,27 @@ class Utils(object):
 
     @staticmethod
     def checkDiagonals(board):
-        for i in range(3, board.height):
+        for i in range(board.height):
             for j in range(board.width):
-                pass
+                result = False
+                if i+3 < board.height and j+3 < board.width:
+                    if board.isGroupOk(board.table[i][j],
+                                       board.table[i+1][j+1],
+                                       board.table[i+2][j+2],
+                                       board.table[i+3][j+3]):
+                        result = True
+                if i+3 < board.height and j-3 >= 0:
+                    if board.isGroupOk(board.table[i][j],
+                                       board.table[i+1][j-1],
+                                       board.table[i+2][j-2],
+                                       board.table[i+3][j-3]):
+                        result = True
+
+                if result == True:
+                    if board.table[i][j].color == 1:
+                        print("You won!")
+                    else:
+                        print("Computer won!")
+                    return True
+        return False
+

@@ -8,6 +8,7 @@ from random import randint
 from domain.entities.dot import Dot
 from domain.entities.player import Player
 from ui.ui import UI
+from utils.ai_computer import AIComputer
 from utils.utils import Utils
 
 
@@ -18,6 +19,7 @@ class Game(object):
         self.__player = Player("human")
         self.__computer = Player("computer")
         self.__isPlayerTurn = True
+        self.__ai = AIComputer(self.__board)
 
     def startGame(self):
         print(self.board)
@@ -37,6 +39,7 @@ class Game(object):
                 print(self.board)
             else:
                 column = randint(0, self.board.width-1)
+                #column = self.AI.computeMove()
                 if not self.board.isAnyDotAvaiable(column):
                     print("Computer chose a move that is not available")
                     continue
@@ -81,3 +84,7 @@ class Game(object):
     @property
     def board(self):
         return self.__board
+
+    @property
+    def AI(self):
+        return self.__ai
