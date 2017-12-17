@@ -9,6 +9,7 @@
     * SQL based manager for 0.2p bonus added
 	* JSON based manager for 0.1p bonus added
   * [Assignment 09] (built over assignment 05-07)
+  * [Assignment 10] - Connect Four Game
   * Partial test from week 07
 
 # License
@@ -36,3 +37,4 @@ Copyright 2017 @ Matko Gabriel Mihai
    [Assignment 05-07]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.05-07.pdf>
    [Assignment 08]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.08.pdf>
    [Assignment 09]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.09.pdf>
+   [Assignment 10]: <http://www.cs.ubbcluj.ro/~arthur/FP2017/Laboratory/Assignment.10.pdf>
