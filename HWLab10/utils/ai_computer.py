@@ -16,12 +16,16 @@ class AIComputer(object):
     def computeMove(self):
         """
         MinMax algorithm for computing move
-        :return:
+        :return: the best move for current position
         """
         minMax = MinMax(deepcopy(self.board))
         return minMax.startMinMax()
 
     # def computeMove(self):
+    #     """
+    #     Random algorithm for computing move
+    #     :return: a random move
+    #     """
     #     if self.board.isAnyDotAvaiable(3):
     #         return 3
     #     for i in reversed(range(3)):
@@ -34,7 +38,3 @@ class AIComputer(object):
     @property
     def board(self):
         return self.__board
-
-    @property
-    def evalBoard(self):
-        return self.__evalBoard

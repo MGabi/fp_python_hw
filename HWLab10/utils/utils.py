@@ -13,10 +13,6 @@ class Utils(object):
                                         board.table[i][j + 1],
                                         board.table[i][j + 2],
                                         board.table[i][j + 3]):
-                    # if board.table[i][j].color == 1:
-                    #     print("You won!")
-                    # else:
-                    #     print("Computer won!")
                     return True
         return False
     
@@ -28,10 +24,6 @@ class Utils(object):
                              board.table[i+1][j],
                              board.table[i+2][j],
                              board.table[i+3][j]):
-                    # if board.table[i][j].color == 1:
-                    #     print("You won!")
-                    # else:
-                    #     print("Computer won!")
                     return True
         return False
 
@@ -52,13 +44,7 @@ class Utils(object):
                                        board.table[i+2][j-2],
                                        board.table[i+3][j-3]):
                         result = True
-
-                if result == True:
-                    # if board.table[i][j].color == 1:
-                    #     print("You won!")
-                    # else:
-                    #     print("Computer won!")
-                    return True
+                    return result
         return False
 
     @staticmethod

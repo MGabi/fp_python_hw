@@ -22,4 +22,3 @@ class Dot(object):
 
     def __str__(self):
         return self.applyColor(self.__color)
-        #return str(self.__color)

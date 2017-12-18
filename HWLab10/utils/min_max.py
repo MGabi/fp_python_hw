@@ -10,7 +10,7 @@ from utils.utils import Utils
 
 
 class MinMax(object):
-
+    global i
     def __init__(self, board):
         self.__board = board
         self.__evalTable = [[3, 4, 5, 7, 5, 4, 3],
@@ -29,54 +29,53 @@ class MinMax(object):
         return self.__board
 
     def startMinMax(self):
+        global i
+        i = 0
+        depth = 4
         moves = self.board.getAvailableMoves()
         bestMove = moves[0]
         bestScore = float('-inf')
+
         for move in moves:
-            #clone = self.board.getNextState(move, Dot(2))
             clone = deepcopy(self.board).getNextState(move, Dot(2))
-            clone
-            print("#######")
-            print("move: " + str(int(move)))
-            score = self.minPlay(clone)
-            print("next\n")
-            #print("move:", move, "score:", score)
+            score = self.minPlay(clone, depth-1)
             if score > bestScore:
                 bestMove = move
                 bestScore = score
-        #print("bestScore:" + str(bestScore))
+        print("i= ",i)
         return bestMove
 
-    def minPlay(self, board):
-        print(board)
+    def minPlay(self, board, depth):
         if Utils.isGameFinished(board):
             return float('inf')
         if Utils.isGameDraw(board):
             return 0
+        if depth == 0:
+            return self.evalBoard(board)
 
         moves = board.getAvailableMoves()
         bestScore = float('inf')
         for move in moves:
-            clone = board.getNextState(move, Dot(1))
-            score = self.maxPlay(clone)
+            clone = deepcopy(board).getNextState(move, Dot(1))
+            score = self.maxPlay(clone, depth-1)
             if score <= bestScore:
                 bestScore = score
 
         return bestScore
 
-    def maxPlay(self, board):
-        print(board)
+    def maxPlay(self, board, depth):
         if Utils.isGameFinished(board):
-            return self.evalBoard(board)
-            #return float('-inf')
+            return float('-inf')
         if Utils.isGameDraw(board):
             return 0
+        if depth == 0:
+            return self.evalBoard(board)
 
         moves = board.getAvailableMoves()
         bestScore = float('-inf')
         for move in moves:
-            clone = board.getNextState(move, Dot(2))
-            score = self.minPlay(clone)
+            clone = deepcopy(board).getNextState(move, Dot(2))
+            score = self.minPlay(clone, depth-1)
             if score >= bestScore:
                 bestScore = score
         return bestScore
@@ -90,7 +89,4 @@ class MinMax(object):
                     sum -= self.evalTable[i][j]
                 elif board.table[i][j].color == 2:
                     sum += self.evalTable[i][j]
-        # print(board)
-        #print("sum", sum)
-        #print(board)
         return half + sum

@@ -52,7 +52,10 @@ class Game(object):
 
                 print("Computer made a move on C" + str(column+1) + ":")
                 print(self.board)
-
+        if not self.isPlayerTurn:
+            print("Congratulations! You won the game!")
+        else:
+            print("GAME OVER\nSorry but the computer is way more smarter than you :D")
         print("Game finished!")
 
 
