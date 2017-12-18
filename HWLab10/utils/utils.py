@@ -13,10 +13,10 @@ class Utils(object):
                                         board.table[i][j + 1],
                                         board.table[i][j + 2],
                                         board.table[i][j + 3]):
-                    if board.table[i][j].color == 1:
-                        print("You won!")
-                    else:
-                        print("Computer won!")
+                    # if board.table[i][j].color == 1:
+                    #     print("You won!")
+                    # else:
+                    #     print("Computer won!")
                     return True
         return False
     
@@ -28,10 +28,10 @@ class Utils(object):
                              board.table[i+1][j],
                              board.table[i+2][j],
                              board.table[i+3][j]):
-                    if board.table[i][j].color == 1:
-                        print("You won!")
-                    else:
-                        print("Computer won!")
+                    # if board.table[i][j].color == 1:
+                    #     print("You won!")
+                    # else:
+                    #     print("Computer won!")
                     return True
         return False
 
@@ -54,10 +54,29 @@ class Utils(object):
                         result = True
 
                 if result == True:
-                    if board.table[i][j].color == 1:
-                        print("You won!")
-                    else:
-                        print("Computer won!")
+                    # if board.table[i][j].color == 1:
+                    #     print("You won!")
+                    # else:
+                    #     print("Computer won!")
                     return True
         return False
 
+    @staticmethod
+    def isGameFinished(board):
+        res = False
+        if Utils.checkLine(board):
+            res = True
+        if Utils.checkColumn(board):
+            res = True
+        if Utils.checkDiagonals(board):
+            res =  True
+        return res
+
+    @staticmethod
+    def isGameDraw(board):
+        res = True
+        for line in board.table:
+            for dot in line:
+                if dot.color == 0:
+                    res = False
+        return res

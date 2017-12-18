@@ -5,6 +5,8 @@
 """
 from random import randint
 
+from copy import deepcopy
+
 from domain.entities.dot import Dot
 
 
@@ -24,6 +26,10 @@ class Board(object):
     @property
     def table(self):
         return self.__table
+
+    @table.setter
+    def table(self, table):
+        self.__table = table
 
     @property
     def height(self):
@@ -51,7 +57,22 @@ class Board(object):
         for i in range(self.__height-1, -1, -1):
             if self.__table[i][column].color == 0:
                 self.__table[i][column] = dot
-                return
+                break
 
     def isGroupOk(self, dot1, dot2, dot3, dot4):
         return dot1.color == dot2.color == dot3.color == dot4.color and dot1.color != 0
+
+    def getAvailableMoves(self):
+        moves = []
+        for i in range(len(self.table)):
+            for j in range(len(self.table[i])):
+                if self.table[i][j].color == 0:
+                    if j not in moves:
+                        moves.append(j)
+        return moves
+
+    def getNextState(self, move, dot):
+        cpy = Board(self.height, self.width)
+        cpy.table = self.table
+        cpy.makeMove(move, dot)
+        return cpy

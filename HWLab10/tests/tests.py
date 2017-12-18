@@ -20,17 +20,19 @@ class TestGameWon(TestCase):
 
         self.assertFalse(Utils.checkLine(self.board), "Error column checking")
 
-        self.board.makeMove(1, Dot(1))
+        self.board.makeMove(1, Dot(2))
         self.board.makeMove(2, Dot(1))
         self.board.makeMove(3, Dot(1))
         self.board.makeMove(4, Dot(1))
+        self.board.makeMove(5, Dot(1))
 
         self.assertTrue(Utils.checkLine(self.board), "Error line checking")
 
     def test_checkColumn(self):
 
         self.assertFalse(Utils.checkColumn(self.board), "Error column checking")
-
+        self.board.makeMove(1, Dot(2))
+        self.board.makeMove(1, Dot(2))
         self.board.makeMove(1, Dot(1))
         self.board.makeMove(1, Dot(1))
         self.board.makeMove(1, Dot(1))
@@ -41,15 +43,17 @@ class TestGameWon(TestCase):
     def test_checkDiagonals(self):
         self.assertFalse(Utils.checkDiagonals(self.board), "Error diagonals checking")
 
-        self.board.makeMove(0, Dot(1))
-        self.board.makeMove(1, Dot(1))
         self.board.makeMove(1, Dot(1))
         self.board.makeMove(2, Dot(1))
         self.board.makeMove(2, Dot(1))
-        self.board.makeMove(2, Dot(1))
+        self.board.makeMove(3, Dot(1))
+
+        self.assertFalse(Utils.checkDiagonals(self.board), "Error diagonals checking")
+
         self.board.makeMove(3, Dot(1))
         self.board.makeMove(3, Dot(1))
-        self.board.makeMove(3, Dot(1))
-        self.board.makeMove(3, Dot(1))
-        print(self.board)
+        self.board.makeMove(4, Dot(1))
+        self.board.makeMove(4, Dot(1))
+        self.board.makeMove(4, Dot(1))
+        self.board.makeMove(4, Dot(1))
         self.assertTrue(Utils.checkDiagonals(self.board), "Error diagonals checking")

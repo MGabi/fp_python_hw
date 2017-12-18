@@ -25,6 +25,9 @@ class Game(object):
         print(self.board)
         print("Width: " + str(self.board.width))
         print("Height: " + str(self.board.height))
+        print("You: \033[31m" + "RED" + "\033[0m")
+        print("Computer: \033[34m" + "BLUE" + "\033[0m")
+
         while not self.isOver():
             if self.isPlayerTurn:
                 column = UI.readPlayerInput(self.board.width) - 1
@@ -38,8 +41,8 @@ class Game(object):
                 print("Your move on C" + str(column+1) + ":")
                 print(self.board)
             else:
-                column = randint(0, self.board.width-1)
-                #column = self.AI.computeMove()
+                computer = AIComputer(self.board)
+                column = computer.computeMove()
                 if not self.board.isAnyDotAvaiable(column):
                     print("Computer chose a move that is not available")
                     continue
@@ -53,25 +56,8 @@ class Game(object):
         print("Game finished!")
 
 
-    def isGameFinished(self):
-        if Utils.checkLine(self.board) == True:
-            return True
-        if Utils.checkColumn(self.board) == True:
-            return True
-        if Utils.checkDiagonals(self.board) == True:
-            return True
-        return False
-
-    def isGameDraw(self):
-        for line in self.board.table:
-            for dot in line:
-                if dot.color == 0:
-                    return False
-        print("DRAW")
-        return True
-
     def isOver(self):
-        return self.isGameFinished() or self.isGameDraw()
+        return Utils.isGameFinished(self.board) or Utils.isGameDraw(self.board)
 
     @property
     def isPlayerTurn(self):

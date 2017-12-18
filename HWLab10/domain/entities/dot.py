@@ -14,11 +14,11 @@ class Dot(object):
 
     def applyColor(self, color):
         if color == 0:
-            return str(color)
+            return "o"
         if color == 1:
-            return "\033[31m" + str(color) + "\033[0m"
+            return "\033[31m" + "o" + "\033[0m"
         if color == 2:
-            return "\033[34m" + str(color) + "\033[0m"
+            return "\033[34m" + "o" + "\033[0m"
 
     def __str__(self):
         return self.applyColor(self.__color)
