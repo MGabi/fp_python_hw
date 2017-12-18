@@ -42,18 +42,23 @@ class TestGameWon(TestCase):
 
     def test_checkDiagonals(self):
         self.assertFalse(Utils.checkDiagonals(self.board), "Error diagonals checking")
+        print(self.board)
+        self.board.makeMove(0, Dot(1))
 
         self.board.makeMove(1, Dot(1))
+        self.board.makeMove(1, Dot(1))
+        self.board.makeMove(1, Dot(2))
+        self.board.makeMove(1, Dot(2))
+        self.board.makeMove(1, Dot(2))
+
+        self.board.makeMove(2, Dot(2))
         self.board.makeMove(2, Dot(1))
         self.board.makeMove(2, Dot(1))
-        self.board.makeMove(3, Dot(1))
-
-        self.assertFalse(Utils.checkDiagonals(self.board), "Error diagonals checking")
 
         self.board.makeMove(3, Dot(1))
+        self.board.makeMove(3, Dot(2))
+        self.board.makeMove(3, Dot(2))
         self.board.makeMove(3, Dot(1))
-        self.board.makeMove(4, Dot(1))
-        self.board.makeMove(4, Dot(1))
-        self.board.makeMove(4, Dot(1))
-        self.board.makeMove(4, Dot(1))
+        self.board.makeMove(3, Dot(2))
+        print(self.board)
         self.assertTrue(Utils.checkDiagonals(self.board), "Error diagonals checking")
