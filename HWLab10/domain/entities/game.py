@@ -18,7 +18,7 @@ class Game(object):
         self.__board = board
         self.__player = Player("human")
         self.__computer = Player("computer")
-        self.__isPlayerTurn = True
+        self.__isPlayerTurn = False
         self.__ai = AIComputer(self.__board)
 
     def startGame(self):

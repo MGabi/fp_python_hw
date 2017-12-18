@@ -73,6 +73,7 @@ class Board(object):
 
     def getNextState(self, move, dot):
         cpy = Board(self.height, self.width)
+        #cpy.table = deepcopy(self.table)
         cpy.table = self.table
         cpy.makeMove(move, dot)
         return cpy

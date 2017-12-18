@@ -5,6 +5,7 @@
 """
 from copy import deepcopy
 
+from utils.alpha_beta_pruning import AlphaBetaSearch
 from utils.min_max import MinMax
 
 
@@ -15,11 +16,19 @@ class AIComputer(object):
 
     def computeMove(self):
         """
-        MinMax algorithm for computing move
+        AlphaBeta Pruning algorithm for computing move
         :return: the best move for current position
         """
-        minMax = MinMax(deepcopy(self.board))
-        return minMax.startMinMax()
+        alphaBetaSearch = AlphaBetaSearch(deepcopy(self.board))
+        return alphaBetaSearch.startAlphaBetaSearch()
+
+    # def computeMove(self):
+    #     """
+    #     MinMax algorithm for computing move
+    #     :return: the best move for current position
+    #     """
+    #     minMax = MinMax(deepcopy(self.board))
+    #     return minMax.startMinMax()
 
     # def computeMove(self):
     #     """

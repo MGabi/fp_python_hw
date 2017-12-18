@@ -1,7 +1,7 @@
 """
     @author: Matko Gabriel
     @email:  ytgabi98@gmail.com
-    @date:   12/17/2017 19:23
+    @date:   12/18/2017 20:18
 """
 from copy import deepcopy
 
@@ -9,7 +9,8 @@ from domain.entities.dot import Dot
 from utils.utils import Utils
 
 
-class MinMax(object):
+class AlphaBetaSearch(object):
+
     def __init__(self, board):
         self.__board = board
         self.__evalTable = [[3, 4, 5, 7, 5, 4, 3],
@@ -27,22 +28,25 @@ class MinMax(object):
     def board(self):
         return self.__board
 
-    def startMinMax(self):
+    def startAlphaBetaSearch(self):
         depth = 6
         moves = self.board.getAvailableMoves()
+
         bestMove = moves[0]
         bestScore = float('-inf')
+        beta = float('inf')
 
         for move in moves:
             clone = deepcopy(self.board).getNextState(move, Dot(2))
-            score = self.minPlay(clone, depth-1)
+            score = self.minValue(clone, depth - 1, bestScore, beta)
             if score > bestScore:
-                bestMove = move
                 bestScore = score
-            print("score:", score)
+                bestMove = move
+            print("value:", score)
+
         return bestMove
 
-    def minPlay(self, board, depth):
+    def minValue(self, board, depth, alpha, beta):
         if Utils.isGameFinished(board):
             return float('inf')
         if Utils.isGameDraw(board):
@@ -51,31 +55,44 @@ class MinMax(object):
             return self.evalBoard(board)
 
         moves = board.getAvailableMoves()
-        bestScore = float('inf')
+        score = float('inf')
+
         for move in moves:
             clone = deepcopy(board).getNextState(move, Dot(1))
-            score = self.maxPlay(clone, depth-1)
-            if score <= bestScore:
-                bestScore = score
+            score = min(score, self.maxValue(clone, depth - 1, alpha, beta))
+            if score <= alpha:
+                return score
+            beta = min(beta, score)
 
-        return bestScore
+        return score
 
-    def maxPlay(self, board, depth):
+    def maxValue(self, board, depth, alpha, beta):
+        isLoosing = False
         if Utils.isGameFinished(board):
-            return float('-inf')
+            #return float('-inf')
+            isLoosing = True
         if Utils.isGameDraw(board):
             return 0
         if depth == 0:
             return self.evalBoard(board)
 
         moves = board.getAvailableMoves()
-        bestScore = float('-inf')
+        score = float('-inf')
+
         for move in moves:
             clone = deepcopy(board).getNextState(move, Dot(2))
-            score = self.minPlay(clone, depth-1)
-            if score >= bestScore:
-                bestScore = score
-        return bestScore
+            score = max(score, self.minValue(clone, depth-1, alpha, beta))
+            if isLoosing is True:
+                if score is float('inf'):
+                    return float('inf')
+            elif score >= beta:
+                return score
+            alpha = max(score, alpha)
+
+        if isLoosing is True:
+            return float('-inf')
+
+        return score
 
     def evalBoard(self, board):
         half = 0
