@@ -29,7 +29,7 @@ class AlphaBetaSearch(object):
         return self.__board
 
     def startAlphaBetaSearch(self):
-        depth = 6
+        depth = 5
         moves = self.board.getAvailableMoves()
 
         bestMove = moves[0]
@@ -50,7 +50,8 @@ class AlphaBetaSearch(object):
         if Utils.isGameFinished(board):
             return float('inf')
         if Utils.isGameDraw(board):
-            return 0
+            return self.evalBoard(board)
+            #return 0
         if depth == 0:
             return self.evalBoard(board)
 
@@ -72,7 +73,8 @@ class AlphaBetaSearch(object):
             #return float('-inf')
             isLoosing = True
         if Utils.isGameDraw(board):
-            return 0
+            #return 0
+            return self.evalBoard(board)
         if depth == 0:
             return self.evalBoard(board)
 

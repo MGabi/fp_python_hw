@@ -11,6 +11,7 @@
   * [Assignment 09] (built over assignment 05-07)
   * [Assignment 10] - Connect Four Game
   * Partial test from week 07
+  * Partial test from week 12
 
 # License
 ----
