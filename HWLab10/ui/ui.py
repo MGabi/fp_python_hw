@@ -21,3 +21,13 @@ class UI(object):
 
             except Exception as ex:
                 print(ex)
+
+    @staticmethod
+    def chooseUI():
+        print("     1. Console")
+        print("     2. GUI")
+        op = input(" >> ")
+        op = int(op)
+        if op not in [1, 2]:
+            raise Exception("There's no such option")
+        return op

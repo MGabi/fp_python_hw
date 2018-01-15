@@ -31,12 +31,13 @@ class AlphaBetaSearch(object):
     def startAlphaBetaSearch(self):
         depth = 5
         moves = self.board.getAvailableMoves()
-
+        # moves = sorted(moves, key = lambda x : self.evalBoard(deepcopy(self.board).getNextState(x, Dot(2))), reverse=True)
         bestMove = moves[0]
         bestScore = float('-inf')
         beta = float('inf')
 
         for move in moves:
+
             clone = deepcopy(self.board).getNextState(move, Dot(2))
             score = self.minValue(clone, depth - 1, bestScore, beta)
             if score > bestScore:
@@ -51,7 +52,7 @@ class AlphaBetaSearch(object):
             return float('inf')
         if Utils.isGameDraw(board):
             return self.evalBoard(board)
-            #return 0
+            # return 0
         if depth == 0:
             return self.evalBoard(board)
 
@@ -70,11 +71,9 @@ class AlphaBetaSearch(object):
     def maxValue(self, board, depth, alpha, beta):
         isLoosing = False
         if Utils.isGameFinished(board):
-            #return float('-inf')
             isLoosing = True
         if Utils.isGameDraw(board):
-            #return 0
-            return self.evalBoard(board)
+            return 0
         if depth == 0:
             return self.evalBoard(board)
 
@@ -83,7 +82,7 @@ class AlphaBetaSearch(object):
 
         for move in moves:
             clone = deepcopy(board).getNextState(move, Dot(2))
-            score = max(score, self.minValue(clone, depth-1, alpha, beta))
+            score = max(score, self.minValue(clone, depth - 1, alpha, beta))
             if isLoosing is True:
                 if score is float('inf'):
                     return float('inf')
