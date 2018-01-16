@@ -10,7 +10,7 @@
 	* JSON based manager for 0.1p bonus added
   * [Assignment 09] (built over assignment 05-07)
   * [Assignment 10] - Connect Four Game
-  * [Assignment 11] - Backtraking problems
+  * [Assignment 11] - Backtracking problems
   * Partial test from week 07
   * Partial test from week 12
 

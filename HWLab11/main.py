@@ -45,7 +45,7 @@ def initial_value():
 def main():
     bkt = BacktrackingAlgorithm(first, consistent, is_solution, get_solution, next_elem, initial_value)
     res = bkt.back_iter(6)
-    # res = bkt.back_rec([], 5)
+    # res = bkt.back_rec([], 6)
 
     for sol in res:
         print(sol)

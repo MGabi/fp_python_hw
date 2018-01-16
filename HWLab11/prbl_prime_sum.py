@@ -18,6 +18,8 @@ def isPrime(n):
 def getFirstElement():
     return 2
 
+def getFirstElementIter():
+    return 1
 
 def isConsistent(x, n):
     s = 0
@@ -61,27 +63,29 @@ def back_rec(x, n):
 
 
 def back_iter(n):
-    x = [getFirstElement()]
+    x = [getFirstElementIter()]
     while len(x) > 0:
         el = getNextElement(x, n)
+
         while el != None:
             x[len(x) - 1] = el
             if isConsistent(x, n):
                 if isSolution(x, n):
                     yield getSolution(x)
                 else:
-                    x.append(getFirstElement())
+                    x.append(getFirstElementIter())
                     break
             el = getNextElement(x, n)
-        if el is None: x = x[:-1]
+        if el is None:
+            x = x[:-1]
 
 def main():
     time1 = datetime.now()
-    res = back_rec([], 30)
-    # res = back_iter(11)
+    # res = back_rec([], 11)
+    res = back_iter(11)
     for sol in res:
         print(*sol)
     time2 = datetime.now()
-    print(time2-time1)
+    print("Time required:", time2-time1)
 
 main()
