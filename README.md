@@ -13,6 +13,7 @@
   * [Assignment 11] - Backtracking problems
   * Partial test from week 07
   * Partial test from week 12
+  * Final exam project ( Hangman game )
 
 # License
 ----
